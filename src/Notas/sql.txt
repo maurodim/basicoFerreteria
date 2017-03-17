@@ -1,0 +1,2 @@
+SELECT sum(cantidad),idArticulo,numeroDeposito FROM `movimientosarticulos` group by idArticulo,numeroDeposito
+//sentencia de vista de articulos por sucursal

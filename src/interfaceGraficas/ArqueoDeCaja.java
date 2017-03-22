@@ -595,7 +595,9 @@ public class ArqueoDeCaja extends javax.swing.JInternalFrame {
         Double saldoEnCaja=totalB - ent;
         this.jLabel13.setVisible(true);
         this.jLabel13.setText("Deja en Caja :"+saldoEnCaja);
-        this.jButton1.requestFocus();
+        this.jFormattedTextField1.setText(String.valueOf(totalB));
+        this.jFormattedTextField1.selectAll();
+        this.jFormattedTextField1.requestFocus();
         //this.jLabel12.setText("SALDO INICIAL :"+saldoInicial);
         //this.jLabel14.setText("VENTA TOTAL :"+totalMovimientos);
         //this.jLabel13.setText("SALDO CAJA :"+diferencia);

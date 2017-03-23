@@ -876,6 +876,7 @@ public class Articulos implements Facturar,Editables,Modificable{
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(articulo.getCodigoDeBarra() != ""){
+        }else{
             sql="update articulos set barras="+ultimoArt+" where id="+ultimoArt;
             tra.guardarRegistro(sql);
         }

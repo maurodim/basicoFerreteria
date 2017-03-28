@@ -875,10 +875,9 @@ public class Articulos implements Facturar,Editables,Modificable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(articulo.getCodigoDeBarra() != ""){
-        }else{
-            sql="update articulos set barras="+ultimoArt+" where id="+ultimoArt;
-            tra.guardarRegistro(sql);
+        if(articulo.getCodigoDeBarra().equals("")){
+          sql="update articulos set barras="+ultimoArt+" where id="+ultimoArt;
+            tra.guardarRegistro(sql);  
         }
         if(articulo.getIdCombo() > 0){
             Articulos art=new Articulos();

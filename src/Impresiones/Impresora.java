@@ -5,9 +5,11 @@ package Impresiones;
  * and open the template in the editor.
  */
 
+import Configuracion.Propiedades;
 import Conversores.Numeros;
 import Depositos.RemitosInternos;
 import Sucursales.Cajas;
+import facturacion.clientes.ClientesTango;
 import interfaceGraficas.Inicio;
 import java.awt.Color;
 import java.awt.Font;
@@ -364,20 +366,33 @@ public class Impresora {
         // aqui comienza el control interno
         //BufferedImage imagen= ImageIO.read(new File("C://Gestion//imagen//logo.png"));
         //pagina.drawImage(imagen,123,20,174,93,null);
-        pagina.setFont(fuente6);
+        
+        pagina.setFont(fuente1);
         pagina.setColor(Color.black);
+        //ENCABEZADO
+        //DATOS DE PROPIEDADES
+        pagina.drawString(Propiedades.getNOMBRECOMERCIO(),40,70);
+        pagina.setFont(fuente);
+        pagina.drawString(Propiedades.getDIRECCION(),40,90);
+        pagina.drawString(Propiedades.getTELEFONO(),40,100);
+        //FIN DATOS DE PROPIEDADES
+        pagina.setFont(fuente6);
         pagina.drawString("COMPROBANTE N° 00"+Inicio.deposito.getNumero()+"-000"+caja.getNumero(),40,130);
         pagina.setFont(fuente11);
         pagina.drawString("REMITO INTERNO", 320,130);
         pagina.setFont(fuente);
         pagina.drawString("FECHA :"+fec, 40,140);
         pagina.setFont(fuente6);
-        pagina.drawString("Deposito Origen :"+caja.getIdDeposito(),40,150);
+        //CLIENTE
+        ClientesTango cliente=caja.getCliente();
+        pagina.drawString("Sr./a : "+cliente.getRazonSocial(),40,150);
         //pagina.drawString("Deposito Origen :"+caja.getDepositoOrigen(),20,160);
         pagina.setFont(fuente);
         pagina.drawString("HORA :"+hrs,320,140);
         pagina.drawString("Usuario :"+Inicio.usuario.getNombre(),320,150);
         pagina.setFont(fuente6);
+        
+        //FIN ENCABEZADO
         //Double monto=caja.getMontoMovimiento();
         //pagina.drawString(" : $ "+monto,20,190);
         //pagina.setFont(fuente1);
@@ -385,7 +400,7 @@ public class Impresora {
         //formulario derecho
         pagina.setFont(fuente6);
         pagina.drawString("ARTICULO", 40,190);
-        pagina.drawString("CANTIDAD", 250,190);
+        pagina.drawString("CANTIDAD", 330,190);
         //pagina.drawString("COSTO", 330,190);
         pagina.drawString("VENTA",410,190);
         int columna=200;
@@ -404,11 +419,15 @@ public class Impresora {
         Double costoTotal=0.00;
         while(itRem1.hasNext()){
             Articulos articulo=(Articulos)itRem1.next();
-            pagina.drawString(articulo.getDescripcionArticulo(), 40,columna);
+            if(articulo.getDescripcionArticulo().length() > 49){
+                pagina.drawString(articulo.getDescripcionArticulo().substring(0,49), 40,columna);
+            }else{
+                pagina.drawString(articulo.getDescripcionArticulo(), 40,columna);
+            }
             cann=String.valueOf(articulo.getCantidad());
             costo=String.valueOf(articulo.getPrecioDeCosto());
             venta=String.valueOf(articulo.getPrecioUnitario());
-            pagina.drawString(cann, 250,columna);
+            pagina.drawString(cann, 330,columna);
             //pagina.drawString(costo,330,columna);
             pagina.drawString(venta,410,columna);
             if(articulo.getPrecioDeCosto()!=null){

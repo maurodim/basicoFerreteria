@@ -46,6 +46,25 @@ public class Propiedades {
     static String VERIF;
     static String VALOR;
     static String ID;
+    static String DIRECCION;
+    static String TELEFONO;
+
+    public static String getDIRECCION() {
+        return DIRECCION;
+    }
+
+    public static void setDIRECCION(String DIRECCION) {
+        Propiedades.DIRECCION = DIRECCION;
+    }
+
+    public static String getTELEFONO() {
+        return TELEFONO;
+    }
+
+    public static void setTELEFONO(String TELEFONO) {
+        Propiedades.TELEFONO = TELEFONO;
+    }
+    
 
     public static String getVERIF() {
         return VERIF;
@@ -173,6 +192,12 @@ public class Propiedades {
                             break;
                         case 17:
                             CORREOCCC=linea.substring(8);
+                            break;
+                        case 18:
+                            DIRECCION=linea.substring(10);
+                            break;
+                        case 19:
+                            TELEFONO=linea.substring(9);
                             break;
                         default:
                             break;

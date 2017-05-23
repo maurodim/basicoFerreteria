@@ -231,7 +231,7 @@ public class Propiedades {
             //fechaVal = ff.parse(fh);
         
                
-        if(fechaVal.after(fecha)){
+        if(fechaVal.after(fecha) && CREADA.equals("0")){
             System.exit(0);
         }else{
             //System.exit(0);

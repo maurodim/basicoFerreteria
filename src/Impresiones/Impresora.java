@@ -5,11 +5,10 @@ package Impresiones;
  * and open the template in the editor.
  */
 
+import Clientes.Objetos.ClientesTango;
 import Configuracion.Propiedades;
-import Conversores.Numeros;
 import Depositos.RemitosInternos;
 import Sucursales.Cajas;
-import facturacion.clientes.ClientesTango;
 import interfaceGraficas.Inicio;
 import java.awt.Color;
 import java.awt.Font;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package facturacion.clientes;
+package Clientes.Objetos;
 
 import interfaces.Personalizable;
 import interfaces.Transaccionable;

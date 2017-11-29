@@ -2,16 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package facturacion.pantallas;
+package Clientes.Pantallas;
 
-import facturacion.clientes.ClientesTango;
-import interfaceGraficas.Inicio;
+import Clientes.Objetos.ClientesTango;
+import facturacion.pantallas.IngresoDePedidos;
+import facturacion.pantallas.IngresoNtaCred;
 import interfacesPrograma.Busquedas;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.DefaultListModel;
-import javax.swing.table.DefaultTableModel;
 import tablas.MiModeloTablaBuscarCliente;
 
 /**
@@ -226,7 +225,7 @@ public class SeleccionDeClientes extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -288,7 +287,7 @@ public class SeleccionDeClientes extends javax.swing.JInternalFrame {
             IngresoNtaCred.jTextField1.requestFocus();
         }catch(java.lang.NullPointerException ex){
             IngresoDePedidos.cliT=cliT;
-            IngresoDePedidos.jLabel6.setText(cliT.getRazonSocial());
+            IngresoDePedidos.jLabel10.setText(cliT.getRazonSocial());
             IngresoDePedidos.jTextField1.requestFocus();
         }
         
@@ -319,7 +318,7 @@ private void cargarTabla(){
             fila[4]=pedidos.getTelefono();
             fila[5]=pedidos.getEmpresa();
             fila[6]=13;
-            fila[7]=2;
+            fila[7]=pedidos.getCondicionDeVenta();
             busC.addRow(fila);
         }
         

@@ -4,13 +4,6 @@
  */
 package Actualizaciones;
 
-import Compras.Proveedores;
-import Depositos.Depositos;
-import Sucursales.Cajas;
-import Sucursales.ListasDePrecios;
-import Sucursales.Sucursales;
-import Sucursales.Usuarios;
-import facturacion.clientes.ClientesTango;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
 import java.awt.event.ActionEvent;
@@ -22,7 +15,6 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
-import objetos.Articulos;
 import objetos.ConeccionLocal;
 import objetos.Conecciones;
 

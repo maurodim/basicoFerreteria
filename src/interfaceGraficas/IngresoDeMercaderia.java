@@ -557,7 +557,7 @@ public class IngresoDeMercaderia extends javax.swing.JInternalFrame {
                 monto=monto * (-1);
                 facturaProveedor.setMontoFinal(monto);
                 Adeudable ade=new FacturaProveedor();
-                ade.PagarComprobante(facturaProveedor);
+                ade.PagarComprobante(facturaProveedor,11);
             }else{
                 facturaProveedor.setPagada(0);
                 facturaProveedor.setFecha(Date.valueOf(fecha2));

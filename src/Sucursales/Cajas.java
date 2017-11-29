@@ -6,9 +6,8 @@ package Sucursales;
 
 import Actualizaciones.BkDeConeccion;
 import Conversores.Numeros;
-import facturacion.clientes.ClientesTango;
+import Clientes.Objetos.ClientesTango;
 import interfaceGraficas.Inicio;
-import interfaceGraficas.ListadoDeArticulos;
 import interfaces.Transaccionable;
 import interfacesPrograma.Cajeables;
 import interfacesPrograma.Facturar;
@@ -58,6 +57,16 @@ public class Cajas extends Sucursales implements Cajeables{
     private static Integer numeroDeComprobanteBk=0;
     private static ArrayList listadoDeComprobantes=new ArrayList();
     private Integer idMovimiento;
+    private Integer pagado;
+
+    public Integer getPagado() {
+        return pagado;
+    }
+
+    public void setPagado(Integer pagado) {
+        this.pagado = pagado;
+    }
+    
 
     public Integer getIdMovimiento() {
         return idMovimiento;
@@ -594,6 +603,12 @@ public class Cajas extends Sucursales implements Cajeables{
         RESULTADO + EL IDCAJA - DE ESTA FORMA GENERO UN NUMERO UNICO DE CAJA PARA CADA EQUIPO Y SE REPLICA EN TODO EL 
         SISTEMA REMOTO - LOCALMENTE LO DEJO ASI PERO QUE SE BACKAPEE SOLAMENTE EL NUMERO DE CAJA ADMINISTRADORA
         
+        //String sql="insert into"cajj.getSaldoFinal()
+        /*
+        ACA TENGO QUE VER SI INDIVIDUALIZO EL EQUIPO, PUEDO PONER NUMEROEQUIPO * 1000000 Y ESE
+        RESULTADO + EL IDCAJA - DE ESTA FORMA GENERO UN NUMERO UNICO DE CAJA PARA CADA EQUIPO Y SE REPLICA EN TODO EL 
+        SISTEMA REMOTO - LOCALMENTE LO DEJO ASI PERO QUE SE BACKAPEE SOLAMENTE EL NUMERO DE CAJA ADMINISTRADORA
+        
         */
         
         sql="update caja set diferencia="+dif2+",saldoFinal="+cajj.getCambioEnCaja()+",estado=1,fechaCierre='"+Inicio.fechaDia+"' where numero="+cajj.getNumero();
@@ -724,6 +739,7 @@ public class Cajas extends Sucursales implements Cajeables{
                 saldoFinal= saldoFinal + rs.getDouble("monto");
                 cajass.setTipoDeComprobante(rs.getInt("tipoComprobante"));
                 cajass.setIdMovimiento(rs.getInt("id"));
+                cajass.setPagado(rs.getInt("pagado"));
                 int pos=cajass.getTipoMovimiento() -1;
                 Operaciones operacion=(Operaciones)listOperaciones.get(pos);
                  String desc=operacion.getDescripcion();
@@ -815,7 +831,7 @@ public class Cajas extends Sucursales implements Cajeables{
             tra=new Conecciones();
         
         */
-         sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado,observaciones) values ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+caj.getNumeroDeComprobante()+","+caj.getTipoDeComprobante()+","+monto+","+caj.getTipoMovimiento()+","+caj.getNumero()+",0,2,0,'"+caj.getDescripcionMovimiento()+"')";
+         sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado,observaciones) values ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+caj.getNumeroDeComprobante()+","+caj.getTipoDeComprobante()+","+monto+","+caj.getTipoMovimiento()+","+caj.getNumero()+",0,2,1,'"+caj.getDescripcionMovimiento()+"')";
     /*    
     }else{
     */ 

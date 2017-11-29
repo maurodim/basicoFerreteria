@@ -4,6 +4,7 @@
  */
 package objetos;
 
+import Clientes.Objetos.ClientesTango;
 import Compras.Proveedores;
 import Configuracion.Propiedades;
 import Depositos.Depositos;
@@ -12,7 +13,6 @@ import Sucursales.ListasDePrecios;
 import Sucursales.Sucursales;
 import Sucursales.Usuarios;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import facturacion.clientes.ClientesTango;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
 import java.io.FileWriter;
@@ -23,12 +23,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLSyntaxErrorException;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaceGraficas;
+package Clientes.Pantallas;
 
 import Conversores.Numeros;
 import Excel.InformesClientes;
-import facturacion.clientes.ClientesTango;
+import Clientes.Objetos.ClientesTango;
+import interfaceGraficas.Inicio;
 import interfacesPrograma.Busquedas;
 import interfacesPrograma.Facturar;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import tablas.MiModeloTablaArticulos;
 
 /**
@@ -25,11 +27,13 @@ import tablas.MiModeloTablaArticulos;
  */
 public class AbmClientes extends javax.swing.JInternalFrame {
     private ArrayList listadoClientes=new ArrayList();
+    ClientesTango cliente;
     /**
      * Creates new form AbmClientes
      */
     public AbmClientes() {
         initComponents();
+        cliente=new ClientesTango();
     }
 
     /**
@@ -51,6 +55,7 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         dateChooserCombo3 = new datechooser.beans.DateChooserCombo();
         dateChooserCombo4 = new datechooser.beans.DateChooserCombo();
         jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -76,7 +81,11 @@ public class AbmClientes extends javax.swing.JInternalFrame {
             fila[2]=cliente.getDireccion();
             fila[3]=cliente.getTelefono();
             fila[4]=cliente.getCupoDeCredito();
-            fila[5]=cliente.getSaldo();
+            if(cliente.getSaldo() !=null){
+                fila[5]=cliente.getSaldo();
+            }else{
+                fila[5]="0.00";
+            }
             fila[6]=cliente.getListaDePrecios();
             miTabla.addRow(fila);
         }
@@ -139,18 +148,29 @@ public class AbmClientes extends javax.swing.JInternalFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        jButton2.setText("Ver Detalle de Saldo");
+        jButton2.setMaximumSize(new java.awt.Dimension(101, 39));
+        jButton2.setMinimumSize(new java.awt.Dimension(101, 39));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 826, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -162,9 +182,10 @@ public class AbmClientes extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -174,15 +195,15 @@ public class AbmClientes extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(40, 40, 40))
         );
 
         pack();
@@ -197,12 +218,23 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         cliente.setTelefono(String.valueOf(this.jTable1.getValueAt(posicion,3)));
         cliente.setCupoDeCredito(Numeros.ConvertirStringADouble(String.valueOf(this.jTable1.getValueAt(posicion,4))));
         Double sal=Numeros.ConvertirStringADouble(String.valueOf(this.jTable1.getValueAt(posicion,5)));
-        Double saldoOriginal=cliente.getSaldo();
-        Double ajuste=sal - saldoOriginal;
+        Double saldoOriginal=0.00;
+        Double ajuste=0.00;
+        if(sal != cliente.getSaldo()){
+            if(cliente.getSaldo() !=null){
+                saldoOriginal=cliente.getSaldo();
+            }
+                ajuste=sal - saldoOriginal;
+        }
         if(ajuste == 0){
             
         }else{
-            cliente.ajustarSaldo(cliente, ajuste);
+            if(JOptionPane.showConfirmDialog(this,"Genera Movimiento de Ajuste de Saldo?","Aplicar Ajuste de Saldo",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==1){
+                
+            }else{
+                cliente.ajustarSaldo(cliente, ajuste);
+            }
+            
         }
         if(cliente.getCupoDeCredito()>0){
             cliente.setCondicionDeVenta(2);
@@ -248,10 +280,20 @@ public class AbmClientes extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int posicion=this.jTable1.getSelectedRow();
+        cliente=(ClientesTango) listadoClientes.get(posicion);
+        AbmSaldosClientes abm=new AbmSaldosClientes(cliente);
+        Inicio.jDesktopPane1.add(abm);
+        abm.setVisible(true);
+        abm.toFront();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private datechooser.beans.DateChooserCombo dateChooserCombo3;
     private datechooser.beans.DateChooserCombo dateChooserCombo4;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

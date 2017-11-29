@@ -132,4 +132,65 @@ public class Numeros {
         String valor=String.valueOf(coe);
         return valor;
     }
+    public static String LeerArticuloDeCodigo(String codigo){
+        String validador=codigo.substring(6,7);
+        //validador="1";
+        Integer val=Integer.parseInt(validador);
+        val=0;
+        String precio;
+        if(val > 0){
+            precio=codigo.substring(1,7);
+        }else{
+            precio=codigo.substring(1,6);
+        }
+        Integer codd=Integer.parseInt(precio);
+        precio=""+codd;
+        return precio;
+    }
+    public static Double LeerPrecioDeCodigo(String codigo){
+        String precio=codigo.substring(6,12);
+        Integer decimal=Integer.parseInt(precio.substring(4));
+        //decimal=decimal / 100;
+        Integer entero=Integer.parseInt(precio.substring(0,4));
+        
+        Double pp=Double.parseDouble(entero+"."+decimal);
+        return pp;
+    }
+    public static String ConvertirTasaIva(Double iva){
+        Double resultado=iva * 1000;
+        resultado=resultado - 1000;
+        String tasaS=String.valueOf(resultado);
+        tasaS=tasaS.substring(0,3);
+        return tasaS;
+    }
+    public static String ConvetirDoubleAString(Double num){
+        DecimalFormat formato=new DecimalFormat("####.###");
+        doble=formato.format(num);
+        return doble;
+    }
+    public static String ConvertirEnPrecioDeBarra(Double num){
+        String valor=String.valueOf(num);
+        valor=valor.replace(".","");
+        switch (valor.length()){
+            case 2:
+                valor=valor +"00";
+                break;
+            case 3:
+                valor=valor +"0";
+                break;
+        }
+        String valC="00000";
+        int cantt=valor.length();
+        int pos=5 - cantt;
+        valC=valC.substring(0,pos)+valor+"0";
+        return valC;
+    }
+    public static String ConvertirEnCodigoDeBarra(String cc){
+        int cant=cc.length();
+        int cant1=6-cant;
+        String vv="200000";
+        String vvv=vv.substring(0, cant1);
+        vvv=vvv + cc;
+        return vvv;
+    }
 }

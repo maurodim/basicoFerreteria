@@ -6,35 +6,26 @@ package interfaceGraficas;
 
 import Actualizaciones.Actualiza;
 import Actualizaciones.Actualiza1;
-import Actualizaciones.BkDeConeccion;
+import Clientes.Objetos.ClientesTango;
+import Clientes.Pantallas.AbmClientes;
 import Compras.Proveedores;
 import Depositos.Depositos;
-import Excel.InformeMensual;
-import Excel.LeerExcel;
-import Excel.LeerIva;
-import Excel.pdfsJavaGenerador;
-import ObjetosBackUp.BackUp;
-import ObjetosBackUp.Backapear;
 import Sucursales.Cajas;
 import Sucursales.ListasDePrecios;
 import Sucursales.Sucursales;
 import Sucursales.Usuarios;
-import facturacion.clientes.ClientesTango;
 import facturacion.pantallas.IngresoDePedidos;
 import facturacion.pantallas.IngresoNtaCred;
 import interfacesPrograma.Cajeables;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,9 +37,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
-import objetos.Articulos;
-import objetos.GastosF;
 
 /**
  *

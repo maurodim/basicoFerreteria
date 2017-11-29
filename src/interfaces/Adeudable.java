@@ -14,6 +14,6 @@ public interface Adeudable {
     public ArrayList ListarAPagar();
     public ArrayList ListarACobrar();
     public Object ActualizarComprobante(Object objeto);
-    public Object PagarComprobante(Object objeto);
+    public Object PagarComprobante(Object objeto,Integer idOperacion);
     
 }

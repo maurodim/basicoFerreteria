@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package facturacion.clientes;
+package Clientes.Objetos;
 
 
 import Conversores.Numeros;
@@ -11,14 +11,11 @@ import interfaces.Adeudable;
 import interfaces.Transaccionable;
 import interfacesPrograma.Busquedas;
 import interfacesPrograma.Facturar;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -461,7 +458,10 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
         numeroActualRecibo();
        numeroRecibo++;
         Transaccionable tra=new Conecciones();
-        String sql="insert into movimientosclientes (numeroProveedor,monto,numeroComprobante,idUsuario,tipoComprobante,idSucursal,idRemito) values ("+cli.getCodigoId()+","+ajuste+","+numeroRecibo+","+Inicio.usuario.getNumeroId()+",15,"+Inicio.sucursal.getNumero()+",0)";
+        String sql="insert into movimientosclientes (numeroProveedor,monto,numeroComprobante,idUsuario,tipoComprobante,idSucursal,idRemito,pagado) values ("+cli.getCodigoId()+","+ajuste+","+numeroRecibo+","+Inicio.usuario.getNumeroId()+",15,"+Inicio.sucursal.getNumero()+",0,0)";
+        System.out.println(sql);
+        tra.guardarRegistro(sql);
+        sql="update tipocomprobantes set numeroActivo="+numeroRecibo+" where numero=11";
         tra.guardarRegistro(sql);
         
     }
@@ -524,7 +524,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
             cliente=cliente.toUpperCase();
             String sql;
             tra=new ConeccionLocal();
-                sql="select codMmd,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA from listcli where RAZON_SOCI like '%"+cliente+"%' order by RAZON_SOCI";
+                sql="select codMmd,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,(select sum(movimientosclientes.monto) from movimientosclientes where movimientosclientes.numeroProveedor=listcli.id and movimientosclientes.pagado=0)as saldoC,listcli.TIPO_IVA from listcli where RAZON_SOCI like '%"+cliente+"%' order by RAZON_SOCI";
             
             //sql="select *,(select coeficienteslistas.coeficiente from coeficienteslistas where coeficienteslistas.id=listcli.NRO_LISTA)as coeficiente,(select sum(movimientosclientes.monto) from movimientosclientes where pagado=0 and movimientosclientes.numeroProveedor=listcli.id)as saldo from listcli";
             //System.out.println("CLIENTES "+sql);
@@ -548,7 +548,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                     cli.setEmpresa(rs.getString("empresa"));
                     cli.setCondicionIva(rs.getString("TIPO_IVA"));
                     cli.setTelefono(rs.getString("TELEFONO_1"));
-                    
+                    cli.setSaldo(rs.getDouble("saldoC"));
                     cli.setCoeficienteListaDeprecios(rs.getDouble("coeficiente"));
                     cli.setCupoDeCredito(rs.getDouble("CUPO_CREDI"));
                     // if(Inicio.usuario.getNivelDeAutorizacion()==1){
@@ -628,9 +628,21 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
         ClientesTango cli=(ClientesTango)cliente;
         Boolean resultado=false;
         Transaccionable tra=new Conecciones();
-        String sql="insert into listcli (COD_CLIENT,RAZON_SOCI,DOMICILIO,TELEFONO_1,TIPO_IVA,NUMERODECUIT,COND_VTA,LISTADEPRECIO,COEFICIENTE,empresa) values ('"+cli.getCodigoCliente()+"','"+cli.getRazonSocial()+"','"+cli.getDireccion()+"','"+cli.getTelefono()+"','"+cli.getCondicionIva()+"','"+cli.getNumeroDeCuit()+"',1,"+cli.getListaDePrecios()+","+cli.getCoeficienteListaDeprecios()+",'"+cli.getEmpresa()+"')";
+        String sql="insert into listcli (COD_CLIENT,RAZON_SOCI,DOMICILIO,TELEFONO_1,TIPO_IVA,NUMERODECUIT,COND_VTA,LISTADEPRECIO,COEFICIENTE,empresa,CUPODECREDITO) values ('"+cli.getCodigoCliente()+"','"+cli.getRazonSocial()+"','"+cli.getDireccion()+"','"+cli.getTelefono()+"','"+cli.getCondicionIva()+"','"+cli.getNumeroDeCuit()+"',"+cli.getCondicionDeVenta()+","+cli.getListaDePrecios()+","+cli.getCoeficienteListaDeprecios()+",'"+cli.getEmpresa()+"',"+cli.getCupoDeCredito()+")";
         System.out.println(sql);
         resultado=tra.guardarRegistro(sql);
+        sql="select last_insert_id()";
+        ResultSet rs=tra.leerConjuntoDeRegistros(sql);
+        Integer id=0;
+            try {
+                while(rs.next()){
+                    id=rs.getInt(1);
+                }
+                sql="update listcli set COD_CLIENT='"+id+"',codmmd="+id+" where id="+id;
+                tra.guardarRegistro(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientesTango.class.getName()).log(Level.SEVERE, null, ex);
+            }
         return resultado;
     }
 
@@ -641,7 +653,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
         Transaccionable tra=new Conecciones();
         
         //String sql="insert into listcli (COD_CLIENT,RAZON_SOCI,DOMICILIO,LOCALIDAD,TELEFONO_1,TIPO_IVA,IDENTIFTRI,COND_VTA,NRO_LISTA,empresa) values ('"+cli.getCodigoCliente()+"','"+cli.getRazonSocial()+"','"+cli.getDireccion()+"','SANTA FE','"+cli.getTelefono()+"',"+cli.getCondicionIva()+",'"+cli.getNumeroDeCuit()+"',1,1,'"+cli.getEmpresa()+"')";
-        String sql="update listcli set RAZON_SOCI='"+cli.getRazonSocial()+"',DOMICILIO='"+cli.getDireccion()+"',TELEFONO_1='"+cli.getTelefono()+"',COND_VTA="+cli.getCondicionDeVenta()+",NRO_LISTA="+cli.getListaDePrecios()+",CUPO_CREDI="+cli.getCupoDeCredito()+" where codmmd ="+cli.getCodigoId();
+        String sql="update listcli set RAZON_SOCI='"+cli.getRazonSocial()+"',DOMICILIO='"+cli.getDireccion()+"',TELEFONO_1='"+cli.getTelefono()+"',COND_VTA="+cli.getCondicionDeVenta()+",LISTADEPRECIO="+cli.getListaDePrecios()+",CUPODECREDITO="+cli.getCupoDeCredito()+" where codmmd ="+cli.getCodigoId();
         resultado=tra.guardarRegistro(sql);
         return resultado;
     }
@@ -684,7 +696,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
     @Override
     public Object cargarPorCodigoAsignado(Integer id) {
          Transaccionable tra=new ConeccionLocal();
-                String sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,listcli.saldo,listcli.TIPO_IVA from listcli where id="+id;
+                String sql="select codMmd,id,listcli.COD_CLIENT,listcli.RAZON_SOCI,listcli.DOMICILIO,listcli.COND_VTA,(listcli.LISTADEPRECIO)as NRO_LISTA,(listcli.NUMERODECUIT)as IDENTIFTRI,listcli.empresa,listcli.TELEFONO_1,listcli.coeficiente,(listcli.CUPODECREDITO) AS CUPO_CREDI,(select sum(movimientosclientes.monto) from movimientosclientes where movimientosclientes.numeroProveedor=listcli.id and movimientosclientes.pagado=0)as saldoC,listcli.TIPO_IVA from listcli where id="+id;
                 ResultSet rs=tra.leerConjuntoDeRegistros(sql);
                 ClientesTango cli=null;
                 
@@ -712,6 +724,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                     
                     cli.setCoeficienteListaDeprecios(rs.getDouble("coeficiente"));
                     cli.setCupoDeCredito(rs.getDouble("CUPO_CREDI"));
+                    cli.setSaldo(rs.getDouble("saldoC"));
                     // if(Inicio.usuario.getNivelDeAutorizacion()==1){
                     System.out.println("ACTUALIZACION :"+Inicio.actualizacionesClientes);
                     try{
@@ -762,20 +775,20 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
     }
 
     @Override
-    public Object PagarComprobante(Object objeto) {
+    public Object PagarComprobante(Object objeto,Integer idOp) {
        Comprobantes factProv=(Comprobantes)objeto;
        numeroActualRecibo();
        numeroRecibo++;
        String fech=Numeros.ConvertirFecha(Inicio.fechaVal);
        Transaccionable tra=new Conecciones();
        Double montt=factProv.getMontoTotal() * -1;
-       String sql="insert into movimientosclientes (numeroProveedor,monto,numeroComprobante,idUsuario,tipoComprobante,idSucursal,idRemito) values ("+factProv.getCliente().getCodigoId()+","+montt+","+numeroRecibo+","+factProv.getUsuarioGenerador()+",11,"+factProv.getIdSucursal()+",0)";
+       String sql="insert into movimientosclientes (numeroProveedor,monto,numeroComprobante,idUsuario,tipoComprobante,idSucursal,idRemito,pagado) values ("+factProv.getCliente().getCodigoId()+","+montt+","+numeroRecibo+","+factProv.getUsuarioGenerador()+",11,"+factProv.getIdSucursal()+",0,0)";
        //String sql="update movimientosproveedores set pagado=1,numeroComprobante="+numeroRecibo+",idCaja="+Inicio.caja.getNumero()+",fechaPago='"+fech+"',idSucursal="+Inicio.sucursal.getNumero()+" where id="+factProv.getId();
        //System.out.println("VEAMOS "+sql);
        tra.guardarRegistro(sql);
        //String ttx="PAGO A PROVEEDOR "+factProv.getNombreProveedor();
        Double monto=factProv.getMontoTotal();
-       sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado) value ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+numeroRecibo+",6,"+monto+",13,"+Inicio.caja.getNumero()+","+factProv.getCliente().getCodigoId()+",1,1)";
+       sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado) value ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+numeroRecibo+",6,"+monto+","+idOp+","+Inicio.caja.getNumero()+","+factProv.getCliente().getCodigoId()+",1,1)";
        tra.guardarRegistro(sql);
        GuardarNumeroRecibo();
        return factProv;

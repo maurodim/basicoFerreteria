@@ -4,15 +4,14 @@
  */
 package objetos;
 
+import Clientes.Objetos.ClientesTango;
 import Conversores.Numeros;
 import Impresiones.Impresora;
-import facturacion.clientes.ClientesTango;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
 import interfacesPrograma.Facturar;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *

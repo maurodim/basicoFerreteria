@@ -4,7 +4,6 @@
  */
 package Compras;
 
-import Administracion.TipoComprobante;
 import Conversores.Numeros;
 import interfaceGraficas.Inicio;
 import interfaces.Adeudable;
@@ -355,7 +354,7 @@ public class FacturaProveedor implements Comprobable,Facturar,Adeudable{
     }
 
     @Override
-    public Object PagarComprobante(Object objeto) {
+    public Object PagarComprobante(Object objeto, Integer idOperacion) {
        FacturaProveedor factProv=(FacturaProveedor)objeto;
        numeroActualRecibo();
        numeroRecibo++;
@@ -382,6 +381,7 @@ public class FacturaProveedor implements Comprobable,Facturar,Adeudable{
     public Object cargarPorCodigoDeBarraMayorista(String codigoDeBarra) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
     
 }

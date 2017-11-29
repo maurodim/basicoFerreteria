@@ -5,14 +5,10 @@
  */
 package Excel;
 
-import facturacion.clientes.ClientesTango;
 import interfaces.Editables;
-import interfaces.Transaccionable;
-import interfacesPrograma.Busquedas;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -5,7 +5,7 @@
  */
 package Excel;
 
-import facturacion.clientes.ClientesTango;
+import Clientes.Objetos.ClientesTango;
 import interfaces.Transaccionable;
 import interfacesPrograma.Busquedas;
 import java.io.FileNotFoundException;
@@ -234,4 +234,150 @@ public class InformesClientes {
         }
 
     } 
+   public void GenerarInformeIndividual(ClientesTango idCliente) throws SQLException{
+                     HSSFWorkbook libro=new HSSFWorkbook();
+        HSSFSheet hoja1=libro.createSheet("Detalle de Saldos");
+        //HSSFSheet hoja1=libro.createSheet("Detalle de Saldos");
+        
+        /*
+         * GENERAR LAS SIGUIENTES HOJAS
+         * 1- DETALLE DE MOVIMIENTOS DE CAJA - LEE EN MOVIMIENTOS CAJA INDENTIFICANDO EL TIPO DE MOVIMIENTO, USUARIOS Y 
+         * NUMERO DE CAJA
+         * 2- DETALLE DE ARTICULOS VENDIDOS: LISTADO DE MOVIEMIENTOS DE ARTICULOS, CON USUARIOS Y CAJA
+         * 3- DETALLE DE GASTOS : MOVIMIENTOS DE CAJA DETALLANDO LOS GASTOS
+         * 
+         */
+        
+        String ttx="celda numero :";
+        HSSFRow fila=null;
+        HSSFCell celda;
+        HSSFCell celda1;
+        HSSFCell celda2;
+        HSSFCell celda3;
+        HSSFCell celda4;
+        HSSFCell celda5;
+        HSSFCell celda6;
+        HSSFCell celda7;
+        HSSFCell celda8;
+        HSSFFont fuente=libro.createFont();
+        //fuente.setFontHeight((short)21);
+        fuente.setFontName(fuente.FONT_ARIAL);
+        fuente.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        String form=null;
+        String sql="";
+        System.out.println(sql);
+        Transaccionable tra=new Conecciones();
+        ResultSet rs=null;
+        HSSFCellStyle titulo=libro.createCellStyle();
+        //Iterator iCli=listadoClientes.listIterator();
+        ClientesTango cliente=new ClientesTango();
+        titulo.setFont(fuente);
+        //titulo.setFillBackgroundColor((short)22);
+        titulo.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        titulo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        //for(int a=0;a < 100;a++){
+        int col=0;
+        int a=0;
+          /*
+           * segunda hoja
+           */  
+           //Facturar bus=new ClientesTango();
+           cliente=idCliente;
+            sql="select numeroProveedor,fecha,monto,numeroComprobante,idUsuario,idCaja,(select tipomovimientos.descripcion from tipomovimientos where tipomovimientos.ID=movimientosclientes.tipoComprobante)as tipocomprobante1,idSucursal,(select listcli.razon_soci from listcli where listcli.codmmd=numeroProveedor)as nombreP from movimientosclientes where numeroProveedor="+cliente.getCodigoId()+" group by numeroComprobante,tipoComprobante order by fecha desc";
+            System.out.println(sql);
+        //fuente.setFontHeight((short)21);
+        fuente.setFontName(fuente.FONT_ARIAL);
+        fuente.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        form=null;
+        //String sql="SELECT *,(select proveedores.nombre from proveedores where proveedores.numero=movimientosproveedores.numeroProveedor)as nombreP,if(pagado=0,'pendiente','pagado')as estado FROM movimientosproveedores where fecha between '"+desde+"' and '"+hasta+"'";
+        //System.out.println(sql);
+        //tra=new Conecciones();
+        rs=tra.leerConjuntoDeRegistros(sql);
+        titulo.setFont(fuente);
+        //titulo.setFillBackgroundColor((short)22);
+        titulo.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        titulo.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        //for(int a=0;a < 100;a++){
+        col=0;
+        a=0;
+            if(a==0){
+                fila=hoja1.createRow(a);
+            celda=fila.createCell(0);
+            celda.setCellStyle(titulo);
+            celda.setCellValue("Cliente");
+            celda1=fila.createCell(1);
+            celda1.setCellStyle(titulo);
+            celda1.setCellValue("Sucursal");
+            celda2=fila.createCell(2);
+            celda2.setCellStyle(titulo);
+            celda2.setCellValue("Fecha");
+            celda3=fila.createCell(3);
+            celda3.setCellStyle(titulo);
+            celda3.setCellValue("Monto");
+            celda4=fila.createCell(4);
+            celda4.setCellStyle(titulo);
+            celda4.setCellValue("Caja Numero");
+            celda5=fila.createCell(5);
+            celda5.setCellStyle(titulo);
+            celda5.setCellValue("tipo de comprobante");
+            }
+            while(rs.next()){
+            a++;
+            //col=rs.getInt("tipoMovimiento");
+            switch(col){
+                case 1:
+                    
+                    break;
+                default:
+                    
+                    break;
+            }
+            fila=hoja1.createRow(a);
+            celda=fila.createCell(0);
+            ttx=ttx;
+            
+            celda.setCellType(HSSFCell.CELL_TYPE_STRING);
+            celda.setCellValue(rs.getString("nombreP"));
+            celda1=fila.createCell(1);
+            ttx=ttx;
+            celda1.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            celda1.setCellValue(rs.getInt("idSucursal"));
+            celda2=fila.createCell(2);
+            celda2.setCellType(HSSFCell.CELL_TYPE_STRING);
+            celda2.setCellValue(" "+rs.getString("fecha"));
+            celda3=fila.createCell(3);
+            celda3.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            celda3.setCellValue(rs.getDouble("monto"));
+            celda4=fila.createCell(4);
+            celda4.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+            celda4.setCellValue(rs.getInt("idCaja"));
+            celda5=fila.createCell(5);
+            celda5.setCellType(HSSFCell.CELL_TYPE_STRING);
+            //if(rs.getInt("tipoComprobante")==11){
+                //celda5.setCellValue("Recibo de Pago");
+            //}else{
+                celda5.setCellValue(rs.getString("tipocomprobante1"));
+            //}
+        } 
+         
+            
+        rs.close();
+        //texto+="\r\n";
+        String clie=cliente.getRazonSocial().replaceAll(" ","_");
+        String ruta="Informes\\"+clie+"_informeDetalleDeSaldo.xls";
+        try {
+            FileOutputStream elFichero;
+                         elFichero = new FileOutputStream(ruta);
+            try {
+                libro.write(elFichero);
+                elFichero.close();
+                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+ruta);
+            } catch (IOException ex) {
+                Logger.getLogger(InformeMensual.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(InformeMensual.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+   }
 }

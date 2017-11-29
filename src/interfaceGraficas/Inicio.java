@@ -421,10 +421,8 @@ public class Inicio extends javax.swing.JFrame {
         jMenuBar1.add(jMenu5);
 
         jMenu6.setText("Clientes");
-        jMenu6.setEnabled(false);
 
         jMenuItem20.setText("Modificacion de clientes");
-        jMenuItem20.setEnabled(false);
         jMenuItem20.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem20ActionPerformed(evt);

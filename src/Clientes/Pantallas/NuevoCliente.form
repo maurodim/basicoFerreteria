@@ -178,12 +178,13 @@
         <Component class="javax.swing.JComboBox" name="jComboBox2">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
+              <StringArray count="3">
+                <StringItem index="0" value="Consumidor Final"/>
+                <StringItem index="1" value="Responsable Inscripto"/>
+                <StringItem index="2" value="Exento"/>
+              </StringArray>
             </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="//ArrayList listadoL=new ArrayList();&#xa;Personalizable per=new ListasDePrecios();&#xa;ListasDePrecios listaP=new ListasDePrecios();&#xa;listadoL=per.listar();&#xa;Iterator ilL=listadoL.listIterator();&#xa;while(ilL.hasNext()){&#xa;    listaP=(ListasDePrecios)ilL.next();&#xa;    jComboBox2.addItem(listaP.getDescripcionLista());&#xa;}"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField5">
         </Component>

@@ -4,14 +4,12 @@
  */
 package Clientes.Pantallas;
 
-import Conversores.Numeros;
 import Clientes.Objetos.ClientesTango;
+import Conversores.Numeros;
 import Clientes.Objetos.ListasDePrecios;
 import facturacion.pantallas.IngresoDePedidos;
-import interfaces.Personalizable;
 import interfacesPrograma.Facturar;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  *
@@ -79,15 +77,7 @@ public class NuevoCliente extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Lista de precios :");
 
-        //ArrayList listadoL=new ArrayList();
-        Personalizable per=new ListasDePrecios();
-        ListasDePrecios listaP=new ListasDePrecios();
-        listadoL=per.listar();
-        Iterator ilL=listadoL.listIterator();
-        while(ilL.hasNext()){
-            listaP=(ListasDePrecios)ilL.next();
-            jComboBox2.addItem(listaP.getDescripcionLista());
-        }
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Consumidor Final", "Responsable Inscripto", "Exento" }));
 
         jLabel7.setText("Saldo Inicial:");
 
@@ -189,12 +179,25 @@ public class NuevoCliente extends javax.swing.JInternalFrame {
            cli.setCondicionDeVenta(1);
        }
            cli.setEmpresa("bu");
-       
+       int tipoIva=0;
+       switch(this.jComboBox2.getSelectedIndex()){
+           case 1:
+               tipoIva=2;
+               break;
+           case 2:
+               tipoIva=3;
+               break;
+           default:
+               tipoIva=1;
+               break;
+       }
+       condicion=String.valueOf(tipoIva);
        ListasDePrecios lista=new ListasDePrecios();
-       int posLista=this.jComboBox2.getSelectedIndex();
+       int posLista=0;
        if(posLista < 0)posLista=0;
-       lista=(ListasDePrecios)listadoL.get(posLista);
-       cli.setListaDePrecios(lista.getNumeroLista());
+       //lista=(ListasDePrecios)listadoL.get(posLista);
+       //lista=new 
+       cli.setListaDePrecios(1);
        /*
        if(cli.getCupoDeCredito() > 0.00){
            cli.setCondicionDeVenta(2);
@@ -207,7 +210,8 @@ public class NuevoCliente extends javax.swing.JInternalFrame {
        cli.setNumeroDeCuit(this.jTextField3.getText());
        cli.setTelefono(this.jTextField4.getText());
        Facturar fact=new ClientesTango();
-        fact.guardarNuevoCliente(cli);
+        cli.setCodigoId(fact.guardarNuevoCliente(cli));
+        cli.setCodigoCliente(String.valueOf(cli.getCodigoId()));
        IngresoDePedidos.jCheckBox2.setSelected(true);
        IngresoDePedidos.jCheckBox2.setEnabled(false);
        IngresoDePedidos.cliT=cli;

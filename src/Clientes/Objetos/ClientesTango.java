@@ -624,13 +624,13 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
     }
 
     @Override
-    public Boolean guardarNuevoCliente(Object cliente) {
+    public Integer guardarNuevoCliente(Object cliente) {
         ClientesTango cli=(ClientesTango)cliente;
-        Boolean resultado=false;
+        Integer resultado=0;
         Transaccionable tra=new Conecciones();
         String sql="insert into listcli (COD_CLIENT,RAZON_SOCI,DOMICILIO,TELEFONO_1,TIPO_IVA,NUMERODECUIT,COND_VTA,LISTADEPRECIO,COEFICIENTE,empresa,CUPODECREDITO) values ('"+cli.getCodigoCliente()+"','"+cli.getRazonSocial()+"','"+cli.getDireccion()+"','"+cli.getTelefono()+"','"+cli.getCondicionIva()+"','"+cli.getNumeroDeCuit()+"',"+cli.getCondicionDeVenta()+","+cli.getListaDePrecios()+","+cli.getCoeficienteListaDeprecios()+",'"+cli.getEmpresa()+"',"+cli.getCupoDeCredito()+")";
         System.out.println(sql);
-        resultado=tra.guardarRegistro(sql);
+        tra.guardarRegistro(sql);
         sql="select last_insert_id()";
         ResultSet rs=tra.leerConjuntoDeRegistros(sql);
         Integer id=0;
@@ -638,6 +638,7 @@ public class ClientesTango implements Busquedas,Facturar,Adeudable{
                 while(rs.next()){
                     id=rs.getInt(1);
                 }
+                resultado=id;
                 sql="update listcli set COD_CLIENT='"+id+"',codmmd="+id+" where id="+id;
                 tra.guardarRegistro(sql);
             } catch (SQLException ex) {

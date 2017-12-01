@@ -6,6 +6,9 @@ package objetos;
 
 import Clientes.Objetos.ClientesTango;
 import Conversores.Numeros;
+import FE.DetalleFacturas;
+import FE.Facturable;
+import FE.Facturas;
 import Impresiones.Impresora;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
@@ -53,7 +56,68 @@ public class Comprobantes implements Facturar{
     private int fiscal;
     private int tipoComprobanteFiscal;
     private Integer id;
+    private Integer idFactura;
+    private Double subTotal;
+    private Double descuento;
+    private Double porcentajeDescuento;
+    private Boolean fe;
 
+    public Boolean getFe() {
+        return fe;
+    }
+
+    public void setFe(Boolean fe) {
+        this.fe = fe;
+    }
+
+    public static Integer getNumeroComprobante() {
+        return numeroComprobante;
+    }
+
+    public static void setNumeroComprobante(Integer numeroComprobante) {
+        Comprobantes.numeroComprobante = numeroComprobante;
+    }
+
+    public static Integer getIdComp() {
+        return idComp;
+    }
+
+    public static void setIdComp(Integer idComp) {
+        Comprobantes.idComp = idComp;
+    }
+
+    public Integer getIdFactura() {
+        return idFactura;
+    }
+
+    public void setIdFactura(Integer idFactura) {
+        this.idFactura = idFactura;
+    }
+
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public Double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Double descuento) {
+        this.descuento = descuento;
+    }
+
+    public Double getPorcentajeDescuento() {
+        return porcentajeDescuento;
+    }
+
+    public void setPorcentajeDescuento(Double porcentajeDescuento) {
+        this.porcentajeDescuento = porcentajeDescuento;
+    }
+    
     public Integer getId() {
         return id;
     }
@@ -302,220 +366,92 @@ public class Comprobantes implements Facturar{
         Boolean imprimioFiscal=false;
         if(comp.getFiscal()==1){
             
-            FileWriter fichero=null;
-            try {
-                
-                String sentencias=null;
-                String cantidad;
-                String precioUnitario;
-                Double redondeo;
-                int posicion;
-                int coincidencia = -1;
-                
-                fichero=new FileWriter("tique.in");
-                PrintWriter pw=new PrintWriter(fichero);
-                
-                //ACA EMPIEZO CON LOS COMPROBANTES FISCALES
-                System.out.println("comprobante tipo: "+comp.getTipoComprobante());
-                if(comp.getTipoComprobante()==8){
-                    String cuit=comp.getCliente().getNumeroDeCuit().replace("-","");
-                    sentencias="@FACTABRE|T|C|A|1|P|12|I|I|"+comp.getCliente().getRazonSocial()+"||CUIT|"+cuit+"|N|"+comp.getCliente().getDireccion()+"|SFE|_|_|_|C";
-                    pw.println(sentencias);
-                    Double pUnitario=0.00;
-                    while(iComp.hasNext()){
-                        articulo=(Articulos)iComp.next();
-                        redondeo=articulo.getCantidad() * 1000;
-                        cantidad=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".","");
-                        //cantidad=String.valueOf(articulo.getCantidad()).replace(".","");
-                        pUnitario=articulo.getPrecioUnitarioNeto() / 1.21;
-                        //pUnitario=articulo.getPrecioUnitarioNeto() - pUnitario;
-                        //pUnitario=pUnitario / articulo.getCantidad();
-                        redondeo=pUnitario;
-                        precioUnitario=Numeros.ConvetirNumeroDosDigitos(redondeo).replace(",", "");
-                        sentencias="@FACTITEM|"+articulo.getDescripcionArticulo()+"|"+cantidad+"|"+precioUnitario+"|2100|M|1|0|0|";
-                        //sentencias=sentencias.replace(".","");
-                        
-                        pw.println(sentencias);
-                    }
-                    Double subtotal=comp.getMontoTotal() * 0.21;
-                    
-                    sentencias="@FACTSUBTOTAL|N";
-                    pw.println(sentencias);
-                    sentencias="@FACTPERCEP|iva|T";
-                    pw.println(sentencias);
-                    sentencias="@FACTCIERRA|T|A|";
-                    pw.println(sentencias);
-                    comp.setTipoComprobanteFiscal(81);
-                }
-                if(comp.getTipoComprobante()==9|| comp.getTipoComprobante()==18){
-                  
-                    String cuit=comp.getCliente().getNumeroDeCuit().replace("-","");
-                    sentencias="@FACTABRE|T|C|B|1|P|12|I|E|"+comp.getCliente().getRazonSocial()+"||CUIT|"+comp.getCliente().getNumeroDeCuit()+"|N|"+comp.getCliente().getDireccion()+"|SFE|_|_|_|C";
-                    pw.println(sentencias);
-                    Double pUnitario=0.00;
-                    while(iComp.hasNext()){
-                        articulo=(Articulos)iComp.next();
-                        redondeo=articulo.getCantidad() * 1000;
-                        cantidad=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".","");
-                        //cantidad=String.valueOf(articulo.getCantidad()).replace(".","");
-                        pUnitario=articulo.getPrecioUnitarioNeto();
-                        //pUnitario=articulo.getPrecioUnitarioNeto() - pUnitario;
-                        redondeo=pUnitario * 100;
-                        precioUnitario=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".", "");
-                        sentencias="@FACTITEM|"+articulo.getDescripcionArticulo()+"|"+cantidad+"|"+precioUnitario+"|210000|M|1|0|0|";
-                        //sentencias=sentencias.replace(".","");
-                        
-                        pw.println(sentencias);
-                    }
-                    Double subtotal=comp.getMontoTotal() * 0.21;
-                    
-                    sentencias="@FACTSUBTOTAL|N";
-                    pw.println(sentencias);
-                    sentencias="@FACTCIERRA|T|B|";
-                    pw.println(sentencias);
-                    comp.setTipoComprobanteFiscal(82);
-                    
-                }
-                if(comp.getTipoComprobante()==11){
-                    sentencias="@TIQUEABRE|B";
-                    
-                    pw.println(sentencias);
-                    while(iComp.hasNext()){
-                        articulo=(Articulos)iComp.next();
-                        redondeo=articulo.getCantidad() * 1000;
-                        cantidad=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".","");
-                        //cantidad=String.valueOf(articulo.getCantidad()).replace(".","");
-                        redondeo=articulo.getPrecioUnitarioNeto() * 100;
-                        precioUnitario=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".", "");
-                        sentencias="@TIQUEITEM|"+articulo.getDescripcionArticulo()+"|"+cantidad+"|"+precioUnitario+"|210000|M|1|0|0|";
-                        //sentencias=sentencias.replace(".","");
-                        
-                        pw.println(sentencias);
-                    }
-                    sentencias="@TIQUESUBTOTAL|P|";
-                    pw.println(sentencias);
-                    sentencias="@TIQUECIERRA|T|";
-                    pw.println(sentencias);
-                    comp.setTipoComprobanteFiscal(82);
-                    
-                }
-                //NOTAS DE CREDITO
-                
-                if(comp.getTipoComprobante()==112){
-                    String cuit=comp.getCliente().getNumeroDeCuit().replace("-","");
-                    sentencias="@FACTABRE|M|C|A|1|P|12|I|I|"+comp.getCliente().getRazonSocial()+"||CUIT|"+cuit+"|N|"+comp.getCliente().getDireccion()+"|SFE|_|_|_|C";
-                    pw.println(sentencias);
-                    Double pUnitario=0.00;
-                    while(iComp.hasNext()){
-                        articulo=(Articulos)iComp.next();
-                        redondeo=articulo.getCantidad() * 1000;
-                        redondeo=redondeo * (-1);
-                        cantidad=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".","");
-                        //cantidad=String.valueOf(articulo.getCantidad()).replace(".","");
-                        pUnitario=articulo.getPrecioUnitarioNeto() / 1.21;
-                        //pUnitario=articulo.getPrecioUnitarioNeto() - pUnitario;
-                        //pUnitario=pUnitario / articulo.getCantidad();
-                        redondeo=pUnitario;
-                        precioUnitario=Numeros.ConvetirNumeroDosDigitos(redondeo).replace(",", "");
-                        sentencias="@FACTITEM|"+articulo.getDescripcionArticulo()+"|"+cantidad+"|"+precioUnitario+"|2100|M|1|0|0|";
-                        //sentencias=sentencias.replace(".","");
-                        
-                        pw.println(sentencias);
-                    }
-                    Double subtotal=comp.getMontoTotal() * 0.21;
-                    
-                    sentencias="@FACTSUBTOTAL|N";
-                    pw.println(sentencias);
-                    sentencias="@FACTPERCEP|iva|T";
-                    pw.println(sentencias);
-                    sentencias="@FACTCIERRA|M|A|";
-                    pw.println(sentencias);
-                    comp.setTipoComprobanteFiscal(112);
-                }
-                if(comp.getTipoComprobante()==113){
-                  
-                    String cuit=comp.getCliente().getNumeroDeCuit().replace("-","");
-                    sentencias="@FACTABRE|M|C|B|1|P|12|I|E|"+comp.getCliente().getRazonSocial()+"||CUIT|"+comp.getCliente().getNumeroDeCuit()+"|N|"+comp.getCliente().getDireccion()+"|SFE|_|_|_|C";
-                    pw.println(sentencias);
-                    Double pUnitario=0.00;
-                    while(iComp.hasNext()){
-                        articulo=(Articulos)iComp.next();
-                        redondeo=articulo.getCantidad() * 1000;
-                        cantidad=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".","");
-                        //cantidad=String.valueOf(articulo.getCantidad()).replace(".","");
-                        pUnitario=articulo.getPrecioUnitarioNeto();
-                        //pUnitario=articulo.getPrecioUnitarioNeto() - pUnitario;
-                        redondeo=pUnitario * 100;
-                        precioUnitario=Numeros.ConvetirNumeroCuatroDigitos(redondeo).replace(".", "");
-                        sentencias="@FACTITEM|"+articulo.getDescripcionArticulo()+"|"+cantidad+"|"+precioUnitario+"|210000|M|1|0|0|";
-                        //sentencias=sentencias.replace(".","");
-                        
-                        pw.println(sentencias);
-                    }
-                    Double subtotal=comp.getMontoTotal() * 0.21;
-                    
-                    sentencias="@FACTSUBTOTAL|N";
-                    pw.println(sentencias);
-                    sentencias="@FACTCIERRA|M|B|";
-                    pw.println(sentencias);
-                    comp.setTipoComprobanteFiscal(113);
-                    
-                }
-                
-                sleep(1000);
-                Runtime jpfBatch=Runtime.getRuntime();
-                System.out.println(sentencias);
-                jpfBatch.exec("java -jar jpfbatch.jar -I tique.in");
+           
+            //Comprobantes comp=(Comprobantes)oob;
+        //Iterator iComp=comp.listadoDeArticulos.listIterator();
+        numeroActual(comp.getTipoComprobante());
+        if(comp.getFe()){
+            numeroComprobante=0;
+        }else{
+        numeroComprobante++;
+        }
+        comp.setNumero(numeroComprobante);
+        Transaccionable tra=new Conecciones();
+        //Articulos articulo=new Articulos();
+        Articulos art;
+        Facturas factura=new Facturas();
+        factura.setEstado(comp.getPagado());
+        factura.setIdCliente(comp.getCliente().getCodigoId());
+        factura.setIdPedido(0);
+        factura.setIdRemito(0);
+        factura.setSubTotal(comp.getSubTotal());
+        factura.setDescuento(comp.getDescuento());
+        factura.setPorcentajeDescuento(comp.getPorcentajeDescuento());
+        factura.setIdUsuario(Inicio.usuario.getNumeroId());
+        factura.setNumeroFactura(numeroComprobante);
+        factura.setTipo(comp.getTipoComprobante());
+        factura.setTotal(comp.getMontoTotal());
+        Facturable ff=new Facturas();
+        factura.setId(ff.nuevaFactura(factura));
+        comp.setIdFactura(factura.getId());
+        DetalleFacturas detalle=new DetalleFacturas();
+        Facturable ffD=new DetalleFacturas();
+        
+        Boolean verif=false;
+        String sql="";
+        while(iComp.hasNext()){
+            articulo=(Articulos)iComp.next();
+            Double cantidad=articulo.getCantidad() * -1;
             
-                File salida=new File("tique.out");
-                FileReader fr = null;
-            
-                fr = new FileReader(salida);
-            
-                BufferedReader br=new BufferedReader(fr);
-                String linea;
-                
-                    int numero=0;
-                    while((linea=br.readLine())!=null){
-                        numero++;
-                        coincidencia=linea.indexOf("0500I");
-                        if(comp.getTipoComprobante()==7)coincidencia=linea.indexOf("0500I");
-                        //coincidencia=linea.indexOf("0500I");
-                        if(comp.getTipoComprobante()==8)coincidencia=linea.indexOf("0500I");
-                        
-                        if(coincidencia != -1){
-                            posicion=coincidencia + 10;
-                            System.out.println(linea.substring(8,15));
-                            numeroComprobante=Integer.parseInt(linea.substring(8,15));
-                            imprimioFiscal=true;
-                            
-                        }
-                        System.out.println(linea+" comprobante "+numeroComprobante);
-                    }
-                    //if(coincidencia== -1)JOptionPane.showMessageDialog(null, "Error en la impresion fiscal ");
-                
-                
-                
-            } catch (IOException ex) {
-                Logger.getLogger(Comprobantes.class.getName()).log(Level.SEVERE, null, ex);
-            
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Comprobantes.class.getName()).log(Level.SEVERE, null, ex);
-            }finally{
-                    try {
-                        fichero.close();
-                        if(imprimioFiscal){
-                            
-                        }else{
-                            return false;
-                        }
-                        
-                    } catch (IOException ex) {
-                        Logger.getLogger(Comprobantes.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            if(articulo.getIdCombo() == 1){
+                Iterator itC=articulo.getCombo().listIterator();
+                Double cant=0.00;
+                art=new Articulos();
+                while(itC.hasNext()){
+                    art=(Articulos)itC.next();
+                    cantidad=cantidad * art.getCantidad();
+                    sql="insert into movimientosarticulos (tipoMovimiento,idArticulo,cantidad,numeroDeposito,tipoComprobante,numeroComprobante,numeroCliente,fechaComprobante,numeroUsuario,precioDeVenta,precioServicio,preciodecosto,idcaja) values ("+comp.getTipoMovimiento()+","+art.getNumeroId()+","+cantidad+","+Inicio.deposito.getNumero()+","+comp.getTipoComprobante()+","+comp.getNumero()+","+comp.getCliente().getCodigoId()+",'"+comp.getFechaEmision()+"',"+comp.getUsuarioGenerador()+","+articulo.getPrecioUnitario()+","+articulo.getPrecioServicio()+","+articulo.getPrecioDeCosto()+","+Inicio.caja.getNumero()+")";
+                    verif=tra.guardarRegistro(sql);
+                    // aca debe grabar en detalle de facturas
                 }
+            }else{
+            detalle.setIdArticulo(articulo.getNumeroId());
+            detalle.setCantidad(articulo.getCantidad());
+            detalle.setIdFactura(factura.getId());
+            detalle.setPrecioUnitario(articulo.getPrecioUnitarioNeto());
+            detalle.setDescripcionArticulo(articulo.getDescripcionArticulo());
+            //detalle.setDescuento(0.00);
+            if(detalle.getDescuento()!=null){
                 
+            }else{
+                detalle.setDescuento(0);
+            }
+            if(detalle.getCantidadRemitida()!=null){
+                
+            }else{
+                detalle.setCantidadRemitida(0.00);
+            }
+            ffD.nuevaFactura(detalle);
+            sql="insert into movimientosarticulos (tipoMovimiento,idArticulo,cantidad,numeroDeposito,tipoComprobante,numeroComprobante,numeroCliente,fechaComprobante,numeroUsuario,precioDeVenta,precioServicio,preciodecosto,idcaja) values ("+comp.getTipoMovimiento()+","+articulo.getNumeroId()+","+cantidad+","+Inicio.deposito.getNumero()+","+comp.getTipoComprobante()+","+comp.getNumero()+","+comp.getCliente().getCodigoId()+",'"+comp.getFechaEmision()+"',"+comp.getUsuarioGenerador()+","+articulo.getPrecioUnitario()+","+articulo.getPrecioServicio()+","+articulo.getPrecioDeCosto()+","+Inicio.caja.getNumero()+")";
+            verif=tra.guardarRegistro(sql);
+            }
+        }
+        
+            sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado) values ("+comp.getUsuarioGenerador()+","+comp.getIdSucursal()+","+comp.getNumero()+","+comp.getTipoComprobante()+",round("+comp.getMontoTotal()+",4),"+comp.getTipoMovimiento()+","+Inicio.caja.getNumero()+","+comp.getCliente().getCodigoId()+",1,"+comp.getPagado()+")";
+            tra.guardarRegistro(sql);
+            sql="insert into movimientosclientes (numeroProveedor,monto,pagado,numeroComprobante,idUsuario,idCaja,idSucursal,tipoComprobante) values ("+comp.getCliente().getCodigoId()+",round("+comp.getMontoTotal()+",4),"+comp.getPagado()+","+numeroComprobante+","+Inicio.usuario.getNumeroId()+","+Inicio.caja.getNumero()+","+Inicio.sucursal.getNumero()+","+comp.getTipoComprobante()+")";
+            tra.guardarRegistro(sql);
+        
+        System.out.println("SE RECEPCIONO BARBARO");
+        sql="update tipocomprobantes set numeroActivo="+numeroComprobante+" where numero="+idComp;
+        /*
+        if(Inicio.coneccionRemota){
             
+        }else{
+        * */
+            tra=new Conecciones();
+        //}
+            tra.guardarRegistro(sql); 
             
         }else{
         numeroActual(comp.getTipoComprobante());
@@ -550,8 +486,14 @@ public class Comprobantes implements Facturar{
                
                String tipo=String.valueOf(comp.getTipoComprobanteFiscal());
                String numero=String.valueOf(numeroComprobante);
-               comp.setMontoBruto(comp.getMontoTotal() / 1.21);
-               comp.setMontoIva(comp.getMontoTotal() - comp.getMontoBruto());
+               Double subbb=comp.getMontoTotal() / 1.21;
+               subbb=Math.round(subbb * 100.0)/ 100.0;
+               Double montoIva=comp.getMontoTotal() - subbb;
+               montoIva=Math.round(montoIva * 100.0)/ 100.0;
+               Double montoBruto=subbb;
+               montoBruto=Math.round(montoBruto * 100.0) /100.0;
+               comp.setMontoBruto(montoBruto);
+               comp.setMontoIva(montoIva);
                int tipoClienteId=0;
                if(comp.getTipoComprobante()==11){
                    tipoClienteId=99;

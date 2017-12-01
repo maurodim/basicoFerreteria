@@ -8,6 +8,8 @@ import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
 import Conversores.Numeros;
 import Clientes.Objetos.ClientesTango;
+import FE.pdfsJavaGenerador;
+import Objetos.FacturaElectronica;
 import interfaceGraficas.Inicio;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
@@ -26,8 +28,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.ParserConfigurationException;
 import objetos.Articulos;
 import objetos.Comprobantes;
+import org.xml.sax.SAXException;
 import tablas.MiModeloTablaFacturacion;
 
 
@@ -49,6 +53,8 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
     private TableColumn columnaNumero;
     private TableColumn columnaDescripcion;
     private TableColumn columnaPrecio;
+    private Double subTotal;
+    private Double porcentajeDescuento;
     
     public IngresoDePedidos() {
         //Articulos.CargarMap();
@@ -107,6 +113,8 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -371,6 +379,22 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton4.setText("FACT ELECT");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagen/icono.png"))); // NOI18N
+        jButton7.setText("Agregar Comentario");
+        jButton7.setPreferredSize(new java.awt.Dimension(129, 41));
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -380,16 +404,24 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -639,7 +671,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                  //System.err.println("MONTO TOTAL "+montoTotal);
                  this.jLabel8.setText("");
                  this.jTable2.removeAll();
-                this.jButton1.setVisible(false);
+                //this.jButton1.setVisible(false);
             this.jTextField1.setText("");
             this.jTextField2.setText("");
             this.jTextField1.requestFocus();
@@ -901,6 +933,245 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
     private void jLabel10PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jLabel10PropertyChange
         System.out.println(cliT.getCondicionDeVenta());
     }//GEN-LAST:event_jLabel10PropertyChange
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        //verificar();
+        //Impresora imp=new Impresora();
+        String cadena=cliT.getCodigoCliente()+" - "+cliT.getRazonSocial()+"\n"+cliT.getDireccion();
+        //comp.setCliente(cliT);
+        //VisorDeHojaDeRuta
+
+        //comp.setVendedor(VisorDeHojaDeRuta.tG.getOperador());
+        if(this.jCheckBox1.isSelected()){
+            //    comp.setReparto(1);
+            //    comp.setEntrega(String.valueOf(this.jTextField3.getText()));
+        }
+
+        //comp.setArticulos(detalleDelPedido);
+        DecimalFormat fr=new DecimalFormat("00");
+        Calendar c1=Calendar.getInstance();
+        Calendar c2=new GregorianCalendar();
+        String dia=Integer.toString(c2.get(Calendar.DAY_OF_MONTH));
+        String mes=Integer.toString(c2.get(Calendar.MONTH));
+        String ano=Integer.toString(c2.get(Calendar.YEAR));
+
+        int da=Integer.parseInt(dia);
+        int me=Integer.parseInt(mes);
+        me++;
+        dia=fr.format(da);
+        mes=fr.format(me);
+        String fecha=dia+"/"+mes+"/"+ano;
+        String fecha2=ano+"-"+mes+"-"+dia;
+        //comp.setFechaComprobante(fecha2);
+        //comp.setFechaComprobante(fecha);
+
+        int comprobanteTipo=1;
+        //cliT.setCondicionIva("1");
+        if(cliT.getCondicionIva().equals("1"))comprobanteTipo=1;
+        if(cliT.getCondicionIva().equals("2"))comprobanteTipo=2;
+        if(cliT.getCondicionIva().equals("3"))comprobanteTipo=3;
+
+        Comprobantes comprobante=new Comprobantes();
+        comprobante.setFe(true);
+        comprobante.setCliente(cliT);
+        comprobante.setTipoMovimiento(1);
+        comprobante.setTipoComprobante(comprobanteTipo);
+        comprobante.setFechaEmision((Date.valueOf(fecha2)));
+        comprobante.setListadoDeArticulos(detalleDelPedido);
+        comprobante.setUsuarioGenerador(Inicio.usuario.getNumero());
+        comprobante.setIdSucursal(Inicio.sucursal.getNumero());
+        comprobante.setIdDeposito(Inicio.deposito.getNumero());
+        Integer numeroCaja=Inicio.caja.getNumero();
+        //System.out.println("EL NUMERO DE CAJA ESSSSSSSS "+numeroCaja);
+        comprobante.setIdCaja(numeroCaja);
+        if(montoTotal == 0.00){
+            String sqM="usuario :"+Inicio.usuario.getNombre()+" sucursal "+Inicio.sucursal.getNumero()+" idcaja "+Inicio.caja.getNumero();
+            JOptionPane.showMessageDialog(this,"OJO EL MONTO DE ESTE COMPROBANTE ES $ 0, AVISE PARA DETECTAR EL ERROR");
+            FileWriter fichero=null;
+            PrintWriter pw=null;
+            try {
+                fichero = new FileWriter("Gestion\\"+Inicio.fechaDia+" - errores en comprobantes.txt",true);
+                    pw=new PrintWriter(fichero);
+                    pw.println(sqM);
+                } catch (IOException ex1) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex1);
+                }finally{
+                    try {
+                        // Nuevamente aprovechamos el finally para
+                        // asegurarnos que se cierra el fichero.
+                        if (null != fichero)
+                        fichero.close();
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
+                }
+            }
+            subTotal=Math.round(montoTotal * 100.0) / 100.0;
+
+            Double ivv=subTotal * 0.21;
+            ivv=Math.round(ivv * 100.0) / 100.0;
+            Double sub=0.00;
+            Double tot=montoTotal + ivv;
+            tot=Math.round(tot * 100.0) /100.0;
+            porcentajeDescuento=0.00;
+            if(porcentajeDescuento > 0.00){
+                sub = subTotal * porcentajeDescuento;
+                sub= montoTotal - sub;
+            }else{
+                sub=montoTotal;
+            }
+
+            comprobante.setMontoTotal(sub);
+            comprobante.setSubTotal(montoTotal);
+            Double descuen=montoTotal - sub;
+            comprobante.setDescuento(descuen);
+            comprobante.setPorcentajeDescuento(porcentajeDescuento);
+
+            int noFacturar=0;
+            if(IngresoDePedidos.jCheckBox2.isSelected()){
+                comprobante.setPagado(1);
+            }else{
+                comprobante.setPagado(0);
+                /*
+                * ACA DEBO COMPROBAR EL LIMITE DEL CLIENTE Y SI LO SUPERA LA COMPRA RECHAZAR LA VENTA
+                *
+                */
+                /*
+                Double limite=cliT.getCupoDeCredito();
+                //Double saldo=cliT.getSaldo();
+                //Double totalGral=montoTotal + saldo;
+                Double totalGral=montoTotal;
+                if(limite < totalGral)noFacturar=1;
+                */
+            }
+            if(noFacturar==0){
+                comprobante.setFiscal(1);
+                Facturar fat=new Comprobantes();
+                fat.guardar(comprobante);
+                // aqui hago el envio a factura  electronica, si aprueba no imprime
+
+                FacturaElectronica fe=new FacturaElectronica();
+                
+                
+                Integer tipDocumento=0;
+                String idCliente=comprobante.getCliente().getNumeroDeCuit();
+                fe.setEstado(comprobante.getPagado());
+                if(idCliente.length() == 8 || idCliente.length()==11){
+
+                }else{
+                    idCliente=JOptionPane.showInputDialog(null,"Ingrese numero de CUIT/CUIL o DNI Sin puntos ni guiones ",idCliente);
+                }
+                idCliente=idCliente.replace("-","");
+                idCliente=idCliente.trim();
+                Integer cantCuit=idCliente.length();
+                switch(cantCuit){
+                    case 11:
+                        if(comprobante.getTipoComprobante()==2)tipDocumento=80;
+                        if(comprobante.getTipoComprobante()==10)tipDocumento=80;
+                        if(comprobante.getTipoComprobante()==3)tipDocumento=80;
+                        if(comprobante.getTipoComprobante()==1)tipDocumento=86;
+                        break;
+                    case 8:
+                        tipDocumento=96;
+                        break;
+                    case 7:
+                        tipDocumento=96;
+                        break;
+                }
+                int tipComprobante=0;
+                
+                if(comprobante.getTipoComprobante()==1)tipComprobante=11;
+                if(comprobante.getTipoComprobante()==2)tipComprobante=11;//1
+                if(comprobante.getTipoComprobante()==9)tipComprobante=12;//2
+                if(comprobante.getTipoComprobante()==10)tipComprobante=13;//3
+                if(comprobante.getTipoComprobante()==11)tipComprobante=12;
+                if(comprobante.getTipoComprobante()==12)tipComprobante=13;
+                /*
+                if(comprobante.getTipoComprobante()==1)tipComprobante=6;
+                if(comprobante.getTipoComprobante()==2)tipComprobante=1;//1
+                if(comprobante.getTipoComprobante()==9)tipComprobante=2;//2
+                if(comprobante.getTipoComprobante()==10)tipComprobante=3;//3
+                if(comprobante.getTipoComprobante()==11)tipComprobante=7;
+                if(comprobante.getTipoComprobante()==12)tipComprobante=8;
+                if(comprobante.getTipoComprobante()==8)tipComprobante=8;
+                if(comprobante.getTipoComprobante()==3)tipComprobante=3;
+                */
+                String tipoDocumento=String.valueOf(tipDocumento);
+
+                fe.setTipoComprobante(String.valueOf(tipComprobante));
+                fe.setTipoDocumento(tipoDocumento);
+                fe.setNumeroDocumento(idCliente);
+                fe.setImporteTotal(Numeros.ConvetirDoubleAString(comprobante.getMontoTotal()));
+                fe.setImporteTotalConcepto("0.00");
+                fe.setImporteNeto(Numeros.ConvetirDoubleAString(comprobante.getMontoBruto()));
+                fe.setImporteIva(Numeros.ConvetirDoubleAString(comprobante.getMontoIva()));
+                fe.setImporteTributo("0.00");
+                fe.setImporteOperacionesExp("0.00");
+                fe.setIvaId("5");
+                fe.setIdFactura(comprobante.getIdFactura());
+                fe=(FacturaElectronica) fe.Solicitar(fe);
+                //if(fe.getRespuesta().equals("OK")){
+                    //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
+                    //fe.setAfipPlastCbte("1");
+                    pdfsJavaGenerador pdf=new pdfsJavaGenerador();
+                    pdf.setDoc(fe);
+                    pdf.setCliente(cliT);
+                    pdf.run();
+                    /*
+                    ImprimirFactura imprimir=new ImprimirFactura();
+                    try {
+                    imprimir.ImprimirFactura(comprobante.getNumero(),comprobante.getTipoComprobante());
+                    } catch (IOException ex) {
+                    Logger.getLogger(IngresoDeFacturas.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    */
+                /*    
+                }else{
+                    if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
+                    JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
+                }
+                    */
+                /*
+                * ACA DEBO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
+                *
+                */
+                //comp.setTipoComprobante(comprobanteTipo);
+                //comp.setMontoTotal(montoTotal);
+                detalleDelPedido.clear();
+                agregarRenglonTabla();
+                this.jCheckBox2.setSelected(true);
+                //this.jCheckBox2.setEnabled(false);
+                this.jTable2.removeAll();
+                listadoDeBusqueda.clear();
+                cargarLista(listadoDeBusqueda);
+                //cliT=new Clientes("99");
+                this.jLabel6.setText(cliT.getRazonSocial());
+                this.jTextField2.setText("");
+                jTextField1.setText("");
+                jTextField1.requestFocus();
+            }else{
+                JOptionPane.showMessageDialog(this,"El cliente supera el límite de crédito, debe abonar la venta");
+                noFacturar=0;
+            }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        int cod=0;
+        String descripcion=JOptionPane.showInputDialog("Ingrese aclaracion del articulo ","");
+        Articulos pedidos=new Articulos();
+        pedidos.setNumeroId(0);
+        pedidos.setCantidad(0.00);
+        pedidos.setPrecioUnitarioNeto(0.00);
+        pedidos.setPrecioDeCosto(0.00);
+        pedidos.setDescripcionArticulo(descripcion);
+        pedidos.setCodigoAsignado(String.valueOf(cod));
+        pedidos.setIdCombo(0);
+        detalleDelPedido.add(pedidos);
+        agregarRenglonTabla();
+        montrarMonto();
+        //jTextField1.setText("");
+        jTextField1.requestFocus();
+    }//GEN-LAST:event_jButton7ActionPerformed
 private void cargarLista(ArrayList lista){
     DefaultTableModel modelo=new DefaultTableModel();
     Modificable mod=new Articulos();
@@ -999,7 +1270,9 @@ private void verificar(){
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBox jCheckBox1;
     public static javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;

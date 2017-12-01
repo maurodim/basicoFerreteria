@@ -545,11 +545,11 @@ public class Comprobantes implements Facturar{
         }
         
             
-            sql="insert into movimientosclientes (numeroProveedor,monto,pagado,numeroComprobante,idUsuario,idCaja,idSucursal,tipoComprobante,idcomprobante) values ("+comp.getCliente().getCodigoId()+","+comp.getMontoTotal()+","+comp.getPagado()+","+numeroComprobante+","+Inicio.usuario.getNumeroId()+","+Inicio.caja.getNumero()+","+Inicio.sucursal.getNumero()+","+comp.getTipoComprobante()+","+comp.getId()+")";
+            sql="insert into movimientosclientes (numeroProveedor,monto,pagado,numeroComprobante,idUsuario,idCaja,idSucursal,tipoComprobante,idcomprobante) values ("+comp.getCliente().getCodigoId()+","+comp.getMontoTotal()+","+comp.getPagado()+","+comp.getNumero()+","+Inicio.usuario.getNumeroId()+","+Inicio.caja.getNumero()+","+Inicio.sucursal.getNumero()+","+comp.getTipoComprobante()+","+comp.getId()+")";
             tra.guardarRegistro(sql);
         
         System.out.println("SE RECEPCIONO BARBARO");
-        sql="update tipocomprobantes set numeroActivo="+numeroComprobante+" where numero="+idComp;
+        sql="update tipocomprobantes set numeroActivo="+comp.getNumero()+" where numero="+idComp;
         /*
         if(Inicio.coneccionRemota){
             

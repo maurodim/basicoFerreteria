@@ -6,9 +6,9 @@ package objetos;
 
 import Clientes.Objetos.ClientesTango;
 import Conversores.Numeros;
-import FE.DetalleFacturas;
-import FE.Facturable;
-import FE.Facturas;
+import FacturaE.DetalleFacturas;
+import FacturaE.Facturable;
+import FacturaE.Facturas;
 import Impresiones.Impresora;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;

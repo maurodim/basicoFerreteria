@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package FE;
+package FacturaE;
 
 
 import Clientes.Objetos.ClientesTango;
 import Configuracion.Propiedades;
+import Conversores.NumberToLetterConverter;
 import Conversores.Numeros;
-import Objetos.FacturaElectronica;
+import com.itextpdf.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
@@ -17,6 +18,7 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.Barcode;
 import com.lowagie.text.pdf.Barcode128;
 
+import com.lowagie.text.Element;
 
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -136,23 +138,23 @@ public class pdfsJavaGenerador {
             if(aa==2)cb.showText("TRIPLICADO");
             cb.setFontAndSize(bf,21);
             cb.setTextMatrix(25,770);
-            cb.showText(doc.getNombreFantasia());
-            //cb.setTextMatrix(90,750);
-            //cb.showText("ANTONIO");
+            cb.showText("CRISTANTE FERNANDO");
+            cb.setTextMatrix(90,750);
+            cb.showText("ANTONIO");
             //cb.showText("eR&Re");
             //cb.add(imagen);
             cb.setFontAndSize(bf,9);
             cb.setTextMatrix(25,740);
-            cb.showText("Razón Social: "+doc.getRazonSocial());
+            cb.showText("Razón Social: Cristante Fernando Antonio");
             cb.setTextMatrix(25, 730);
-            cb.showText("Domicilio Comercial: "+doc.getDomicilioFiscal());
+            cb.showText("Domicilio Comercial: "+Propiedades.getDIRECCION());
             //cb.showText("PAPELES");
             //bf = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1252,BaseFont.NOT_EMBEDDED);
             //cb.setFontAndSize(bf,10);
             cb.setTextMatrix(25,720);
-            cb.showText("Telefono: "+doc.getTelefono());
+            cb.showText("Telefono: "+Propiedades.getTELEFONO());
             cb.setTextMatrix(25,710);
-            cb.showText("Condición frente la IVA: "+doc.getCondicionFrenteIva());
+            cb.showText("Condición frente la IVA: Responsable Inscripto");
             
             //cb.showText("de Rivadeneira Enrique y Rivadeneira Jorge S.H.");
             //bf = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1252,BaseFont.NOT_EMBEDDED);
@@ -246,17 +248,17 @@ public class pdfsJavaGenerador {
             bf = BaseFont.createFont(BaseFont.HELVETICA_BOLD,BaseFont.CP1252,BaseFont.NOT_EMBEDDED);
             cb.setFontAndSize(bf,9);
             cb.setTextMatrix(360,755);
-            cb.showText("Punto de Venta: 000"+doc.getPuntoDeVenta()+" Comp. Nro:"+numero);
+            cb.showText("Punto de Venta: 000"+Propiedades.getPTO()+" Comp. Nro:"+numero);
             //bf = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1252,BaseFont.NOT_EMBEDDED);
             cb.setFontAndSize(bf,9);
             cb.setTextMatrix(360,745);
             cb.showText("Fecha de emisión: "+doc.getFechaCae());
             cb.setTextMatrix(360,730);
-            cb.showText("CUIT: "+doc.getCuit());
+            cb.showText("CUIT: "+Propiedades.getCUIT());
             cb.setTextMatrix(360,720);
-            cb.showText("Ing. Brutos: "+doc.getNumeroIngresosBrutos());
+            cb.showText("Ing. Brutos: "+Propiedades.getINGBRUTOS());
             cb.setTextMatrix(360,710);
-            cb.showText("Inicio Activ.: "+doc.getInicioActividades());
+            cb.showText("Inicio Activ.: "+Propiedades.getINICIOACT());
             //cb.setTextMatrix(380,740);
             //cb.showText("Fecha "+doc.getFechaCae());
             bf = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1252,BaseFont.NOT_EMBEDDED);
@@ -306,16 +308,16 @@ public class pdfsJavaGenerador {
             //cb.setTextMatrix(40,650);
             //cb.showText("Telefono: "+cliente.getTelefono());
             cb.setTextMatrix(380,640);
-            Integer tipo=Integer.parseInt(String.valueOf(doc.getTipoDocumento()));
+            Integer tipo=Integer.parseInt(String.valueOf(doc.getCustomerTypeDoc()));
             switch (tipo){
                 case 80:
-                    cb.showText("Cuit: "+doc.getNumeroDocumento());
+                    cb.showText("Cuit: "+doc.getCustomerId());
                     break;
                 case 86:
-                    cb.showText("Cuil: "+doc.getNumeroDocumento());
+                    cb.showText("Cuil: "+doc.getCustomerId());
                     break;
                 case 96:
-                    cb.showText("Dni: "+doc.getNumeroDocumento());
+                    cb.showText("Dni: "+doc.getCustomerId());
                     break;
             }
             
@@ -580,13 +582,13 @@ public class pdfsJavaGenerador {
             cb.showText(vencimiento1);
             cb.setTextMatrix(20,renglon);
             renglon=renglon - 50;
-             Image imagen= Image.getInstance("Configuracion/afip.JPG");
+             Image imagen= Image.getInstance("imagenes/afip.JPG");
                 //imagen.scaleAbsolute(84, 410);
                 imagen.setAbsolutePosition(20,renglon);
                 documento.add(imagen);
                 Barcode128 codeEAN=new Barcode128();
                 codeEAN.setCodeType(Barcode.CODE128);
-                String codigoB=doc.getCuit()+comF+doc.getCae()+doc.getCaeVto()+"3";
+                String codigoB=Propiedades.getCUIT()+comF+doc.getCae()+doc.getCaeVto()+"3";
                 codeEAN.setCode(codigoB);
                 //codeEAN.setSize(5);
                 Image img=codeEAN.createImageWithBarcode(cb, Color.BLACK, Color.black);

@@ -25,7 +25,7 @@ public class Numeros {
     private static String fecha;
     
     public static String ConvertirNumero(Double num){
-        DecimalFormat formato=new DecimalFormat("####.#");
+        DecimalFormat formato=new DecimalFormat("####.00");
         doble=formato.format(num);
         return doble;
     }

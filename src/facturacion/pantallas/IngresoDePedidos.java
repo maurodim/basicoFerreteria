@@ -8,8 +8,8 @@ import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
 import Conversores.Numeros;
 import Clientes.Objetos.ClientesTango;
-import FE.pdfsJavaGenerador;
-import Objetos.FacturaElectronica;
+import FacturaE.FacturaElectronica;
+import FacturaE.pdfsJavaGenerador;
 import interfaceGraficas.Inicio;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
@@ -964,13 +964,13 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
         String fecha2=ano+"-"+mes+"-"+dia;
         //comp.setFechaComprobante(fecha2);
         //comp.setFechaComprobante(fecha);
-
+        
         int comprobanteTipo=1;
         //cliT.setCondicionIva("1");
         if(cliT.getCondicionIva().equals("1"))comprobanteTipo=1;
         if(cliT.getCondicionIva().equals("2"))comprobanteTipo=2;
         if(cliT.getCondicionIva().equals("3"))comprobanteTipo=3;
-
+        
         Comprobantes comprobante=new Comprobantes();
         comprobante.setFe(true);
         comprobante.setCliente(cliT);
@@ -1007,7 +1007,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 }
             }
             subTotal=Math.round(montoTotal * 100.0) / 100.0;
-
+            
             Double ivv=subTotal * 0.21;
             ivv=Math.round(ivv * 100.0) / 100.0;
             Double sub=0.00;
@@ -1051,86 +1051,36 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 // aqui hago el envio a factura  electronica, si aprueba no imprime
 
                 FacturaElectronica fe=new FacturaElectronica();
-                
-                
-                Integer tipDocumento=0;
-                String idCliente=comprobante.getCliente().getNumeroDeCuit();
-                fe.setEstado(comprobante.getPagado());
-                if(idCliente.length() == 8 || idCliente.length()==11){
+                try {
 
-                }else{
-                    idCliente=JOptionPane.showInputDialog(null,"Ingrese numero de CUIT/CUIL o DNI Sin puntos ni guiones ",idCliente);
-                }
-                idCliente=idCliente.replace("-","");
-                idCliente=idCliente.trim();
-                Integer cantCuit=idCliente.length();
-                switch(cantCuit){
-                    case 11:
-                        if(comprobante.getTipoComprobante()==2)tipDocumento=80;
-                        if(comprobante.getTipoComprobante()==10)tipDocumento=80;
-                        if(comprobante.getTipoComprobante()==3)tipDocumento=80;
-                        if(comprobante.getTipoComprobante()==1)tipDocumento=86;
-                        break;
-                    case 8:
-                        tipDocumento=96;
-                        break;
-                    case 7:
-                        tipDocumento=96;
-                        break;
-                }
-                int tipComprobante=0;
-                
-                if(comprobante.getTipoComprobante()==1)tipComprobante=11;
-                if(comprobante.getTipoComprobante()==2)tipComprobante=11;//1
-                if(comprobante.getTipoComprobante()==9)tipComprobante=12;//2
-                if(comprobante.getTipoComprobante()==10)tipComprobante=13;//3
-                if(comprobante.getTipoComprobante()==11)tipComprobante=12;
-                if(comprobante.getTipoComprobante()==12)tipComprobante=13;
-                /*
-                if(comprobante.getTipoComprobante()==1)tipComprobante=6;
-                if(comprobante.getTipoComprobante()==2)tipComprobante=1;//1
-                if(comprobante.getTipoComprobante()==9)tipComprobante=2;//2
-                if(comprobante.getTipoComprobante()==10)tipComprobante=3;//3
-                if(comprobante.getTipoComprobante()==11)tipComprobante=7;
-                if(comprobante.getTipoComprobante()==12)tipComprobante=8;
-                if(comprobante.getTipoComprobante()==8)tipComprobante=8;
-                if(comprobante.getTipoComprobante()==3)tipComprobante=3;
-                */
-                String tipoDocumento=String.valueOf(tipDocumento);
+                    fe=(FacturaElectronica) fe.leer(comprobante);
+                    if(fe.getRespuesta().equals("OK")){
+                        //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
+                        pdfsJavaGenerador pdf=new pdfsJavaGenerador();
+                        pdf.setDoc(fe);
+                        pdf.setCliente(cliT);
+                        pdf.run();
+                        /*
+                        ImprimirFactura imprimir=new ImprimirFactura();
+                        try {
+                            imprimir.ImprimirFactura(comprobante.getNumero(),comprobante.getTipoComprobante());
+                        } catch (IOException ex) {
+                            Logger.getLogger(IngresoDeFacturas.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        */
 
-                fe.setTipoComprobante(String.valueOf(tipComprobante));
-                fe.setTipoDocumento(tipoDocumento);
-                fe.setNumeroDocumento(idCliente);
-                fe.setImporteTotal(Numeros.ConvetirDoubleAString(comprobante.getMontoTotal()));
-                fe.setImporteTotalConcepto("0.00");
-                fe.setImporteNeto(Numeros.ConvetirDoubleAString(comprobante.getMontoBruto()));
-                fe.setImporteIva(Numeros.ConvetirDoubleAString(comprobante.getMontoIva()));
-                fe.setImporteTributo("0.00");
-                fe.setImporteOperacionesExp("0.00");
-                fe.setIvaId("5");
-                fe.setIdFactura(comprobante.getIdFactura());
-                fe=(FacturaElectronica) fe.Solicitar(fe);
-                //if(fe.getRespuesta().equals("OK")){
-                    //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
-                    //fe.setAfipPlastCbte("1");
-                    pdfsJavaGenerador pdf=new pdfsJavaGenerador();
-                    pdf.setDoc(fe);
-                    pdf.setCliente(cliT);
-                    pdf.run();
-                    /*
-                    ImprimirFactura imprimir=new ImprimirFactura();
-                    try {
-                    imprimir.ImprimirFactura(comprobante.getNumero(),comprobante.getTipoComprobante());
-                    } catch (IOException ex) {
-                    Logger.getLogger(IngresoDeFacturas.class.getName()).log(Level.SEVERE, null, ex);
+                    }else{
+                        if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
+                        JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
                     }
-                    */
-                /*    
-                }else{
-                    if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
-                    JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
+                } catch (IOException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println(ex);
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SAXException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                    */
                 /*
                 * ACA DEBO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
                 *
@@ -1153,6 +1103,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this,"El cliente supera el límite de crédito, debe abonar la venta");
                 noFacturar=0;
             }
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

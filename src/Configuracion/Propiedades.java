@@ -14,17 +14,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import objetos.ConeccionInstalacion;
-import objetos.ConeccionLocal;
 
 /**
  *
@@ -48,7 +49,58 @@ public class Propiedades {
     static String ID;
     static String DIRECCION;
     static String TELEFONO;
+    static String KEY;
+    static String BK;
+    static String FISCAL;
+    static String ELECTRONICA;
+    static String CUIT;
+    static String INGBRUTOS;
+    static String INICIOACT;
+    static String PTO;
+    static String CONDICION;
+    static String SKEY;
 
+    public static String getBK() {
+        return BK;
+    }
+
+    public static String getFISCAL() {
+        return FISCAL;
+    }
+
+    public static String getELECTRONICA() {
+        return ELECTRONICA;
+    }
+
+    public static String getCUIT() {
+        return CUIT;
+    }
+
+    public static String getINGBRUTOS() {
+        return INGBRUTOS;
+    }
+
+    public static String getINICIOACT() {
+        return INICIOACT;
+    }
+
+    public static String getPTO() {
+        return PTO;
+    }
+
+    public static String getCONDICION() {
+        return CONDICION;
+    }
+
+    public static String getSKEY() {
+        return SKEY;
+    }
+    
+
+    public static String getKEY() {
+        return KEY;
+    }
+    
     public static String getDIRECCION() {
         return DIRECCION;
     }
@@ -132,134 +184,124 @@ public class Propiedades {
     
     public static void CargarPropiedades() throws ParseException{
         File archivo = new File ("Configuracion\\bbsGestion.properties");
+        Properties p=new Properties();
          if(archivo.exists()){
-         FileReader fr = null;
+         try {
+                //Process px=Runtime.getRuntime().exec("c:/xampp/xampp_start.exe");
+                sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Propiedades.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         
+        int verificado=0;
+        
             try {
-                fr = new FileReader (archivo);
-                BufferedReader br = new BufferedReader(fr);
-                // Lectura del fichero
-                String linea;
-                int renglon=0;
-                //Transaccionable tra=new Conecciones();
-                while((linea=br.readLine())!=null){
-                    
-                    
-                    renglon++;
-                    switch (renglon){
-                        case 1:
-                            break;
-                        case 2:
-                            SERVER=linea.substring(7);
-                            break;
-                        case 3:
-                            BD=linea.substring(3);
-                            break;
-                        case 4:
-                            USUARIO=linea.substring(8);
-                            break;
-                        case 5:
-                            CLAVE=linea.substring(6);
-                            break;
-                        case 6:
-                            CREADA=linea.substring(7);
-                            break;
-                        case 7:
-                            ARCHIVOBK=linea.substring(10);
-                            break;
-                        case 9:
-                            NOMBRECOMERCIO=linea.substring(15);
-                            break;
-                        case 10:
-                            LOGO=linea.substring(5);
-                            break;
-                        case 11:
-                            IMAGEN=linea.substring(7);
-                            break;
-                        case 12:
-                            VERIF=linea.substring(6);
-                            break;
-                        case 13:
-                            CORREOCIERREDECAJA=linea.substring(5);
-                            break;
-                        case 14:
-                            VALOR=linea.substring(6);
-                            break;
-                        case 15:
-                            ID=linea.substring(3);
-                            break;
-                        case 16:
-                            CORREOCC=linea.substring(7);
-                            break;
-                        case 17:
-                            CORREOCCC=linea.substring(8);
-                            break;
-                        case 18:
-                            DIRECCION=linea.substring(10);
-                            break;
-                        case 19:
-                            TELEFONO=linea.substring(9);
-                            break;
-                        default:
-                            break;
-                            
-                    }
-                    
-                    System.out.println(renglon+" // "+SERVER+" // "+BD+" // "+USUARIO+" // "+CLAVE+" // "+CREADA+" // "+ARCHIVOBK+" // "+NOMBRECOMERCIO);
-                    // if(tra.guardarRegistro(linea));
-      }
-                Date fecha=Numeros.ConvertirStringEnDate(VERIF);
-                DecimalFormat fr1=new DecimalFormat("00");
-                Calendar c1=Calendar.getInstance();
-	Calendar c2=new GregorianCalendar();
-	String dia=Integer.toString(c2.get(Calendar.DAY_OF_MONTH));
-	String mes=Integer.toString(c2.get(Calendar.MONTH));
-	String ano=Integer.toString(c2.get(Calendar.YEAR));
-	
-        int da=Integer.parseInt(dia);
-        int me=Integer.parseInt(mes);
-        me++;
-        dia=fr1.format(da);
-        mes=fr1.format(me);
-        String fechaDia=ano+"-"+mes+"-"+dia;
-	//System.err.println(fechaDia);
-        //fecha="23/12/2011";
-        String fh=ano+"-"+mes+"-"+dia;
-        SimpleDateFormat ff=new SimpleDateFormat("yyyy-MM-dd");
-        Date fechaVal = null;    
-        
-            fechaVal = Numeros.ConvertirStringEnDate(fh);
-            //fechaVal = ff.parse(fh);
-        
-               
-        if(fechaVal.after(fecha) && CREADA.equals("0")){
-            System.exit(0);
-        }else{
-            //System.exit(0);
-        }
-        if(CREADA.equals("0")){
-                        
-                        Transaccionable tra=new ConeccionInstalacion();
-                        tra.guardarRegistro("create database "+BD);
-                        tra.guardarRegistro("use "+BD);
-                        tra.guardarRegistro("grant usage on *.* to '"+USUARIO+"'@localhost identified by '"+CLAVE+"'");
-                        tra.guardarRegistro("grant all privileges on "+USUARIO+".* to "+USUARIO+"@localhost");
-                        //tra.guardarRegistro("quit");
-                        Backapear back=new BackUp();
-                        back.RecuperarArchivos("Configuracion/"+ARCHIVOBK,BD);
-                        
-                    }
-            
+                p.load(new FileReader(archivo));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Propiedades.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(Propiedades.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    fr.close();
-                    //JOptionPane.showMessageDialog(null,"INICIANDO CONFIGURACION Y CREACION DE LA BASE DE DATOS");
-                } catch (IOException ex) {
-                    Logger.getLogger(Propiedades.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            }
+            Enumeration<Object> keys = p.keys();
+
+            while (keys.hasMoreElements()){
+               Object key = keys.nextElement();
+               System.out.println(key + " = "+ p.get(key));
+            }   
+         
+            
+         //FileReader fr = null;
+            
+                //fr = new FileReader (archivo);
+                //BufferedReader br = new BufferedReader(fr);
+                // Lectura del fichero
+                String linea;
+                int renglon=0;
+                //Transaccionable tra=new Conecciones();
+                //while((linea=br.readLine())!=null){
+                    
+                             
+                    
+                    
+                            CREADA=p.getProperty("CREADA");
+                        
+                            ARCHIVOBK=p.getProperty("ARCHIVOBK");
+                        
+                            NOMBRECOMERCIO=p.getProperty("NOMBRECOMERCIO");
+                        
+                            LOGO=p.getProperty("LOGO");
+                        
+                            IMAGEN=p.getProperty("IMAGEN");
+                        
+                            VERIF=p.getProperty("VERIF");
+                       
+                            CORREOCIERREDECAJA=p.getProperty("MAIL");
+                        
+                            VALOR=p.getProperty("VALOR");
+                        
+                            ID=p.getProperty("ID");
+                        
+                            CORREOCC=p.getProperty("MAILCC");
+                            
+                            CORREOCCC=p.getProperty("MAILCCO");
+                            
+                            DIRECCION=p.getProperty("DIRECCION");
+                            
+                            TELEFONO=p.getProperty("TELEFONO");
+                        
+                            BK=p.getProperty("BK");
+                            FISCAL=p.getProperty("FISCAL");
+                            ELECTRONICA=p.getProperty("ELECTRONICA");
+                            KEY=p.getProperty("KEY");
+                            
+                            CUIT=p.getProperty("CUIT");
+                            INGBRUTOS=p.getProperty("INGBRUTOS");
+                            INICIOACT=p.getProperty("INICIOACT");
+                            PTO=p.getProperty("PTO");
+                            //CONDICION=p.getProperty("CONDICION");
+                            CONDICION="2";
+                            SKEY=p.getProperty("SKEY");
+                            
+                        
+                    
+                    //System.out.println(renglon+" // "+linea);
+                    // if(tra.guardarRegistro(linea));
+                   
+                
+                    
+                    
+                    //JOptionPane.showMessageDialog(null,"NO SE HA PODIDO ESTABLECER CONEXION CON INTERNET, POR FAVOR VERIFIQUE DICHA CONEXION");
+                            
+                            Date fecha=Numeros.ConvertirStringEnDate(VERIF);
+                            DecimalFormat fr1=new DecimalFormat("00");
+                            Calendar c1=Calendar.getInstance();
+                            Calendar c2=new GregorianCalendar();
+                            String dia=Integer.toString(c2.get(Calendar.DAY_OF_MONTH));
+                            String mes=Integer.toString(c2.get(Calendar.MONTH));
+                            String ano=Integer.toString(c2.get(Calendar.YEAR));
+
+                            int da=Integer.parseInt(dia);
+                            int me=Integer.parseInt(mes);
+                            me++;
+                            dia=fr1.format(da);
+                            mes=fr1.format(me);
+                            String fechaDia=ano+"-"+mes+"-"+dia;
+                            //System.err.println(fechaDia);
+                            //fecha="23/12/2011";
+                            String fh=ano+"-"+mes+"-"+dia;
+                            SimpleDateFormat ff=new SimpleDateFormat("yyyy-MM-dd");
+                            Date fechaVal = null;    
+
+                                fechaVal = Numeros.ConvertirStringEnDate(fh);
+                                //fechaVal = ff.parse(fh);
+
+
+                           if(fechaVal.after(fecha)){
+            System.exit(0);
+        }else{
+            //System.exit(0);
+        }
+        
                 
             }
         }
@@ -267,7 +309,7 @@ public class Propiedades {
         
         
         
-    }
+    
     private void CrearBase(){
         Boolean veridi=false;
         Transaccionable tra=new ConeccionInstalacion();

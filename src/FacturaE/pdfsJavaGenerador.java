@@ -8,25 +8,18 @@ package FacturaE;
 
 import Clientes.Objetos.ClientesTango;
 import Configuracion.Propiedades;
-import Conversores.NumberToLetterConverter;
 import Conversores.Numeros;
-import com.itextpdf.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.Barcode;
 import com.lowagie.text.pdf.Barcode128;
-
-import com.lowagie.text.Element;
-
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import java.awt.Color;
-
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -138,14 +131,14 @@ public class pdfsJavaGenerador {
             if(aa==2)cb.showText("TRIPLICADO");
             cb.setFontAndSize(bf,21);
             cb.setTextMatrix(25,770);
-            cb.showText("CRISTANTE FERNANDO");
-            cb.setTextMatrix(90,750);
-            cb.showText("ANTONIO");
+            cb.showText(Propiedades.getNOMBRECOMERCIO());
+            //cb.setTextMatrix(90,750);
+            //cb.showText("ANTONIO");
             //cb.showText("eR&Re");
             //cb.add(imagen);
             cb.setFontAndSize(bf,9);
             cb.setTextMatrix(25,740);
-            cb.showText("Razón Social: Cristante Fernando Antonio");
+            cb.showText("Razón Social: "+Propiedades.getRAZONSOCIAL());
             cb.setTextMatrix(25, 730);
             cb.showText("Domicilio Comercial: "+Propiedades.getDIRECCION());
             //cb.showText("PAPELES");
@@ -393,12 +386,15 @@ public class pdfsJavaGenerador {
                 
                     cb.showText(String.valueOf(saldo.getIdArticulo()));
                     cb.setTextMatrix(70,renglon);
-
+                    if(saldo.getDescripcionArticulo() != null){
                     if(saldo.getDescripcionArticulo().length() > 40){
                         descripcionArt=saldo.getDescripcionArticulo().substring(0, 40);
                      }else{
                          descripcionArt=saldo.getDescripcionArticulo();
                      }
+                    }else{
+                        descripcionArt="";
+                    }
                     cb.showText(descripcionArt);
                     cb.setTextMatrix(330,renglon);
                     cb.showText(String.valueOf(saldo.getCantidad()));

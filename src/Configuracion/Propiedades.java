@@ -59,6 +59,12 @@ public class Propiedades {
     static String PTO;
     static String CONDICION;
     static String SKEY;
+    static String RAZONSOCIAL;
+
+    public static String getRAZONSOCIAL() {
+        return RAZONSOCIAL;
+    }
+    
 
     public static String getBK() {
         return BK;
@@ -222,7 +228,9 @@ public class Propiedades {
                     
                              
                     
-                    
+                    SERVER=p.getProperty("SERVER");
+                    USUARIO=p.getProperty("USUARIO");
+                    CLAVE=p.getProperty("CLAVE");
                             CREADA=p.getProperty("CREADA");
                         
                             ARCHIVOBK=p.getProperty("ARCHIVOBK");
@@ -261,6 +269,7 @@ public class Propiedades {
                             //CONDICION=p.getProperty("CONDICION");
                             CONDICION="2";
                             SKEY=p.getProperty("SKEY");
+                            RAZONSOCIAL=p.getProperty("RAZONSOCIAL");
                             
                         
                     

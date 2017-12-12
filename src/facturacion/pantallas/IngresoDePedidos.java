@@ -1006,12 +1006,13 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                     }
                 }
             }
-            subTotal=Math.round(montoTotal * 100.0) / 100.0;
-            
-            Double ivv=subTotal * 0.21;
-            ivv=Math.round(ivv * 100.0) / 100.0;
+            montoTotal=Math.round(montoTotal * 100.0) / 100.0;
+            subTotal=montoTotal / 1.21;
+            //Double ivv=subTotal / 1.21;
+            subTotal=Math.round(subTotal * 100.0) / 100.0;
+            //Double ivv=Math.round(ivv * 100.0) / 100.0;
             Double sub=0.00;
-            Double tot=montoTotal + ivv;
+            Double tot=montoTotal - subTotal;
             tot=Math.round(tot * 100.0) /100.0;
             porcentajeDescuento=0.00;
             if(porcentajeDescuento > 0.00){
@@ -1020,9 +1021,11 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
             }else{
                 sub=montoTotal;
             }
-
-            comprobante.setMontoTotal(sub);
-            comprobante.setSubTotal(montoTotal);
+            
+            comprobante.setMontoTotal(montoTotal);
+            comprobante.setSubTotal(subTotal);
+            comprobante.setMontoIva(tot);
+            comprobante.setMontoBruto(subTotal);
             Double descuen=montoTotal - sub;
             comprobante.setDescuento(descuen);
             comprobante.setPorcentajeDescuento(porcentajeDescuento);

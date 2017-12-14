@@ -260,7 +260,11 @@ public class FacturaElectronica implements FacturableE,Instalable{
         if(idCliente.length() == 8 || idCliente.length()==11){
             
         }else{
+            
             idCliente=JOptionPane.showInputDialog(null,"Ingrese numero de CUIT/CUIL o DNI Sin puntos ni guiones ",idCliente);
+            if(idCliente.equals("0")){
+                idCliente="00000000";
+            }
         }
         idCliente=idCliente.replace("-","");
         idCliente=idCliente.trim();
@@ -269,6 +273,7 @@ public class FacturaElectronica implements FacturableE,Instalable{
             case 11:
                 if(compro.getTipoComprobante()==2)tipDocumento=80;
                 if(compro.getTipoComprobante()==10)tipDocumento=80;
+                if(compro.getTipoComprobante()==8)tipDocumento=80;
                 if(compro.getTipoComprobante()==3)tipDocumento=80;
                 if(compro.getTipoComprobante()==1)tipDocumento=86;
                 break;

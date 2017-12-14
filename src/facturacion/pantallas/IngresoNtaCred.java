@@ -4,10 +4,14 @@
  */
 package facturacion.pantallas;
 
+import Clientes.Objetos.ClientesTango;
 import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
 import Conversores.Numeros;
-import Clientes.Objetos.ClientesTango;
+import FacturaE.FacturaElectronica;
+import FacturaE.pdfsJavaGenerador;
+import static facturacion.pantallas.IngresoDePedidos.cliT;
+
 import interfaceGraficas.Inicio;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
@@ -26,8 +30,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.xml.parsers.ParserConfigurationException;
 import objetos.Articulos;
 import objetos.Comprobantes;
+import org.xml.sax.SAXException;
 import tablas.MiModeloTablaFacturacion;
 
 
@@ -53,7 +59,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
     public IngresoNtaCred() {
         //Articulos.CargarMap();
         cliT=new ClientesTango("999999");
-        //cliT=(ClientesTango)oob;
+        //cliT=(Clientes)oob;
         //comp.setCliente(cliT);
         initComponents();
         this.jLabel6.setText(cliT.getRazonSocial());
@@ -81,7 +87,6 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -103,12 +108,13 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("FACTURACION - INGRESO DE ARTICULOS");
+        setTitle("NOTA DE CREDITO");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameActivated(evt);
@@ -144,13 +150,6 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 153));
 
-        jButton1.setText("IMPRIMIR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jButton2.setText("Eliminar Item");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,9 +179,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(168, 168, 168)
                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -190,7 +187,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,9 +204,8 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jButton1))
-                .addGap(15, 15, 15))
+                    .addComponent(jLabel2))
+                .addGap(20, 20, 20))
         );
 
         jLabel3.setText("Codigo de Barra");
@@ -367,6 +363,13 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         });
         jScrollPane3.setViewportView(jTable2);
 
+        jButton1.setText("NTA CRED ELECT");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -375,12 +378,18 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -664,21 +673,21 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         mes=fr.format(me);
         String fecha=dia+"/"+mes+"/"+ano;
         String fecha2=ano+"-"+mes+"-"+dia;
-        int comprobanteTipo=113;
-        if(cliT.getCondicionIva().equals("2"))comprobanteTipo=112;
+        int comprobanteTipo=8;
+        if(cliT.getCondicionIva().equals("2"))comprobanteTipo=3;
         if(cliT.getCondicionIva().equals("1")){
             if(montoTotal > 1000){
              if(cliT.getRazonSocial().equals("CONSUMIDOR FINAL") || cliT.getNumeroDeCuit().equals("0"))   {
                  cliT.setRazonSocial(JOptionPane.showInputDialog("Ingrese el nombre del cliente",cliT.getRazonSocial()));
                  cliT.setNumeroDeCuit(JOptionPane.showInputDialog("Ingrese el numero de documento del cliente",cliT.getNumeroDeCuit()));
              }
-             comprobanteTipo=113;
+             comprobanteTipo=8;
             }else{
-            comprobanteTipo=113;
+            comprobanteTipo=8;
             }
         }
         
-        if(cliT.getCondicionIva().equals("3"))comprobanteTipo=113;
+        if(cliT.getCondicionIva().equals("3"))comprobanteTipo=8;
         
         Comprobantes comprobante=new Comprobantes();
         comprobante.setCliente(cliT);
@@ -714,7 +723,23 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
             }
         }
         //montoTotal=montoTo;
-        comprobante.setMontoTotal(montoTotal);
+            Double subTotal=montoTotal;
+            Double ivv=subTotal * 0.21;
+            Double sub=0.00;
+            Double tot=montoTotal + ivv;
+            Double porcentajeDescuento=0.00;
+            if(porcentajeDescuento > 0.00){
+                sub = subTotal * porcentajeDescuento;
+                sub= montoTotal - sub;
+            }else{
+                sub=montoTotal;
+            }
+
+            comprobante.setMontoTotal(sub);
+            comprobante.setSubTotal(montoTotal);
+            Double descuen=montoTotal - sub;
+            comprobante.setDescuento(descuen);
+            comprobante.setPorcentajeDescuento(porcentajeDescuento);
         int noFacturar=0;
         if(this.jCheckBox2.isSelected()){
             comprobante.setPagado(1);
@@ -724,10 +749,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
             * ACA DEBO COMPROBAR EL LIMITE DEL CLIENTE Y SI LO SUPERA LA COMPRA RECHAZAR LA VENTA
             *
             */
-            Double limite=cliT.getCupoDeCredito();
-            Double saldo=cliT.getSaldo();
-            Double totalGral=montoTotal + saldo;
-            if(limite < totalGral)noFacturar=1;
+           
             
         }
         if(noFacturar==0){
@@ -735,13 +757,42 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
             //EpsonTicket impresoraFiscal=new EpsonTicket();
             
             comprobante.setFiscal(1);
-            
-            if(fat.guardar(comprobante)){
-                
-            }else{
-                JOptionPane.showMessageDialog(this,"Error al emitir el comprobante, el mismo no se pudo generar");
-                ok=1;
+            comprobante.setFe(true);
+            fat.guardar(comprobante);
+            FacturaElectronica fe=new FacturaElectronica();
+               comprobante.setMontoBruto(comprobante.getMontoBruto() * -1);
+               comprobante.setMontoIva(comprobante.getMontoIva() * -1);
+               comprobante.setMontoTotal(comprobante.getMontoTotal() * -1);
+
+            try {
+                fe=(FacturaElectronica) fe.leer(comprobante);
+                if(fe.getRespuesta().equals("OK")){
+                        //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
+                        pdfsJavaGenerador pdf=new pdfsJavaGenerador();
+                        pdf.setDoc(fe);
+                        pdf.setCliente(cliT);
+                        pdf.run();
+                    }else{
+                        if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
+                        JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
+                    }
+            } catch (IOException ex) {
+                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
             }
+                    
+            
+            /*
+            * ACA DEVO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
+            *
+            */
+            //comp.setTipoComprobante(comprobanteTipo);
+            //comp.setMontoTotal(montoTotal);
+                    
+            
             /*
             * ACA DEVO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
             *

@@ -314,7 +314,7 @@ private void cargarTabla(){
             fila[0]=pedidos.getCodigoCliente();
             fila[1]=pedidos.getRazonSocial();
             fila[2]=pedidos.getDireccion();
-            fila[3]=pedidos;
+            fila[3]=pedidos.getNumeroDeCuit();
             fila[4]=pedidos.getTelefono();
             fila[5]=pedidos.getEmpresa();
             fila[6]=13;

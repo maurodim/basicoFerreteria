@@ -4,8 +4,12 @@
  */
 package interfaceGraficas;
 
+import Conversores.Numeros;
 import Excel.InformeArticulos;
 import Excel.PlanillaStock;
+import interfaces.Articulable;
+import interfaces.Componable;
+import interfaces.Rubable;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
@@ -14,7 +18,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import objetos.Articulos;
+import objetos.Rubros;
 import tablas.MiModeloTablaArticulos;
 
 /**
@@ -23,12 +29,24 @@ import tablas.MiModeloTablaArticulos;
  */
 public class ArticulosAbm extends javax.swing.JInternalFrame {
     private ArrayList listadoA=new ArrayList();
+    private ArrayList listadoRubro;
+    private Rubros rubro;
+    private Componable rubC;
+    private Rubable rub;
+    
     
     /**
      * Creates new form ArticulosAbm
      */
     public ArticulosAbm() {
         initComponents();
+        rubC=new Rubros();
+        rub=new Rubros();
+        listadoRubro=new ArrayList();
+        rubro=new Rubros();
+        listadoRubro=rub.listarTodos();
+        this.jComboBox1.setModel(rubC.LlenarComboConArray(listadoRubro));
+        
     }
 
     /**
@@ -52,6 +70,18 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jButton8 = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -59,7 +89,7 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
         setTitle("Alta, Baja y modificacion de Articulos");
 
         MiModeloTablaArticulos modelArticulos=new MiModeloTablaArticulos();
-        Facturar fact=new Articulos();
+        Articulable fact=new Articulos();
         listadoA=fact.listadoBusqueda("");
         Iterator list=listadoA.listIterator();
         jTable1.setModel(modelArticulos);
@@ -69,7 +99,7 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
         modelArticulos.addColumn("STOCK MIN");
         modelArticulos.addColumn("COSTO");
         modelArticulos.addColumn("P. VENTA");
-        modelArticulos.addColumn("SERVICIO");
+        modelArticulos.addColumn("MAYORISTA");
         Object[] fila=new Object[7];
         while(list.hasNext()){
             Articulos articulos=(Articulos)list.next();
@@ -137,6 +167,44 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setText("Para Modificar Precio por rubro, seleccionelo");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("%");
+
+        jButton6.setText("Mod Costo");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("%");
+
+        jButton7.setText("Mod Venta");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Ingrese el porcentaje de modificación ");
+
+        jLabel7.setText("%");
+
+        jButton8.setText("Mod Mayorista");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -149,12 +217,30 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField2)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField3)
+                            .addComponent(jTextField4)
+                            .addComponent(jTextField5))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -162,7 +248,7 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
@@ -181,6 +267,27 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jButton6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(jButton7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jButton8))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -225,7 +332,7 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
         ArrayList listadoDeBusqueda=fart.listadoBusqueda(this.jTextField1.getText().toUpperCase());
         cargarLista(listadoDeBusqueda);    
         }
@@ -238,7 +345,7 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
     private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
                 if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
         
         ArrayList listadoDeBusqueda=fart.listarClientes(this.jTextField2.getText().toUpperCase());
         cargarLista(listadoDeBusqueda);    
@@ -264,6 +371,53 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
             Logger.getLogger(ArticulosAbm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        Double porc=Numeros.ConvertirStringADouble(this.jTextField5.getText());
+        if(JOptionPane.showConfirmDialog(this,"Ajusta Valores de los precios mayoristas en los Articulos en un "+porc+"%?","Modificar Costo",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==1){
+            
+        }else{
+            
+                porc=porc / 100;
+                porc=1 + porc;
+                rub.modificarPrecio(porc, rubro.getId(), 3);
+            
+            
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        rubro=(Rubros) listadoRubro.get(this.jComboBox1.getSelectedIndex());
+        this.jTextField3.requestFocus();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Double porc=Numeros.ConvertirStringADouble(this.jTextField3.getText());
+        if(JOptionPane.showConfirmDialog(this,"Ajusta Valores de los precios de Costo en los Articulos en un "+porc+"%?","Modificar Costo",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==1){
+            
+        }else{
+            
+                porc=porc / 100;
+                porc=1 + porc;
+                rub.modificarPrecio(porc, rubro.getId(), 1);
+            
+            
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        Double porc=Numeros.ConvertirStringADouble(this.jTextField4.getText());
+        if(JOptionPane.showConfirmDialog(this,"Ajusta Valores de los precios de VENTA en los Articulos en un "+porc+"%?","Modificar Costo",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==1){
+            
+        }else{
+            
+                porc=porc / 100;
+                porc=1 + porc;
+                rub.modificarPrecio(porc, rubro.getId(), 2);
+            
+            
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
     public void agregarRenglon(){
         MiModeloTablaArticulos busC=new MiModeloTablaArticulos();
         this.jTable1.removeAll();
@@ -321,12 +475,24 @@ public class ArticulosAbm extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,7 @@ public class MiModeloTablaContacto extends DefaultTableModel{
     @Override
           public Class getColumnClass(int colum){
         
-          if(colum==2) {
+          if(colum==0) {
                   return Boolean.class;
               }
         return String.class;

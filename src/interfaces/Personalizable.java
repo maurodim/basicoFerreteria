@@ -5,6 +5,8 @@
 package interfaces;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,4 +22,6 @@ public interface Personalizable {
     public ArrayList listar();
     public ArrayList listarPorNombre(String nombre);
     public ArrayList listarPorCuit(String cuit);
+    public DefaultComboBoxModel mostrarEnCombo(ArrayList listado);
+    public DefaultTableModel mostrarEnTabla(ArrayList listado);
 }

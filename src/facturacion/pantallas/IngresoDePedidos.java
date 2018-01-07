@@ -11,6 +11,7 @@ import Clientes.Objetos.ClientesTango;
 import FacturaE.FacturaElectronica;
 import FacturaE.pdfsJavaGenerador;
 import interfaceGraficas.Inicio;
+import interfaces.Articulable;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
@@ -458,7 +459,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             //System.out.println("ENTRO CON EL ENTER¡¡¡¡¡¡");
             listadoDeBusqueda.clear();
-            Facturar fart=new Articulos();
+            Articulable fart=new Articulos();
             arti=new Articulos();
                 arti=(Articulos) fart.cargarPorCodigoDeBarra(jTextField1.getText());
                 //arti=(Articulos)fart.cargarPorCodigoDeBarraMayorista(jTextField1.getText(),cliT.getListaDePrecios());
@@ -512,7 +513,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
         }
         if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
             listadoDeBusqueda=fart.listadoBusqueda(jTextField1.getText());
             //listadoDeBusqueda=fart.listadoBusquedaMayorista(this.jTextField1.getText(),cliT.getListaDePrecios());
         
@@ -1128,7 +1129,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 private void cargarLista(ArrayList lista){
     DefaultTableModel modelo=new DefaultTableModel();
-    Modificable mod=new Articulos();
+    Articulable mod=new Articulos();
     modelo=mod.mostrarListadoBusqueda(lista);
     
     this.jTable2.setModel(modelo);

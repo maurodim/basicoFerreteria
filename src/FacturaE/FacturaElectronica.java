@@ -287,14 +287,14 @@ public class FacturaElectronica implements FacturableE,Instalable{
         String tipoDocumento=String.valueOf(tipDocumento);
         System.out.println();
         if(Propiedades.getCONDICION().equals("2")){
-            if(compro.getTipoComprobante()==1)tipComprobante=6;
-            if(compro.getTipoComprobante()==2)tipComprobante=1;//1
+            if(compro.getTipoComprobante()==1)tipComprobante=6;//factura B a consumidor final
+            if(compro.getTipoComprobante()==2)tipComprobante=1;//1 FACTURA A 
             if(compro.getTipoComprobante()==9)tipComprobante=2;//2
-            if(compro.getTipoComprobante()==10)tipComprobante=3;//3
+            if(compro.getTipoComprobante()==10)tipComprobante=3;//3 NOTA DE CREDITO A
             if(compro.getTipoComprobante()==11)tipComprobante=7;
             if(compro.getTipoComprobante()==12)tipComprobante=8;
-            if(compro.getTipoComprobante()==8)tipComprobante=8;
-            if(compro.getTipoComprobante()==3)tipComprobante=3;
+            if(compro.getTipoComprobante()==8)tipComprobante=8;//NTA DE CREDITO B A CONS FINAL y exento
+            if(compro.getTipoComprobante()==3)tipComprobante=6;// factura B A EXENTO
         }else{
             if(compro.getTipoComprobante()==1)tipComprobante=11;
             if(compro.getTipoComprobante()==2)tipComprobante=11;//1

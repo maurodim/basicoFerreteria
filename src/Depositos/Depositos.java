@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import objetos.Articulos;
 import objetos.ConeccionLocal;
 import objetos.Conecciones;
@@ -280,6 +282,16 @@ public class Depositos implements Personalizable, Trasladable{
         
         
         return listado;
+    }
+
+    @Override
+    public DefaultComboBoxModel mostrarEnCombo(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel mostrarEnTabla(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

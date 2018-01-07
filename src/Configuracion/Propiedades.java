@@ -33,7 +33,7 @@ import objetos.ConeccionInstalacion;
  */
 public class Propiedades {
     static String SERVER;
-    static String BD="bbsgestion";
+    static String BD;
     static String USUARIO;
     static String CLAVE;
     static String CREADA;
@@ -60,7 +60,13 @@ public class Propiedades {
     static String CONDICION;
     static String SKEY;
     static String RAZONSOCIAL;
+    static String MODULORUBROS;
 
+    public static String getMODULORUBROS() {
+        return MODULORUBROS;
+    }
+    
+    
     public static String getRAZONSOCIAL() {
         return RAZONSOCIAL;
     }
@@ -227,7 +233,7 @@ public class Propiedades {
                 //while((linea=br.readLine())!=null){
                     
                              
-                    
+                    BD=p.getProperty("BD");
                     SERVER=p.getProperty("SERVER");
                     USUARIO=p.getProperty("USUARIO");
                     CLAVE=p.getProperty("CLAVE");
@@ -270,6 +276,7 @@ public class Propiedades {
                             CONDICION="2";
                             SKEY=p.getProperty("SKEY");
                             RAZONSOCIAL=p.getProperty("RAZONSOCIAL");
+                            MODULORUBROS=p.getProperty("MODULORUBROS");
                             
                         
                     

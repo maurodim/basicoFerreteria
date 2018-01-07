@@ -5,6 +5,7 @@
  */
 package Excel;
 
+import interfaces.Articulable;
 import interfaces.Editables;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,7 +33,7 @@ public class PlanillaStock {
               HSSFWorkbook libro=new HSSFWorkbook();
         HSSFSheet hoja=libro.createSheet("Listado de Articulos");
         ArrayList listadoPorSucursal=new ArrayList();
-        Editables edi=new Articulos();
+        Articulable edi=new Articulos();
         
         /*
          * GENERAR LAS SIGUIENTES HOJAS

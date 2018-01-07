@@ -7,6 +7,7 @@ package interfaceGraficas;
 import Conversores.Numeros;
 import Depositos.Depositos;
 import Depositos.RemitosInternos;
+import interfaces.Articulable;
 import interfaces.Comprobable;
 import interfacesPrograma.Facturar;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class RecepcionDeRemitoInterno extends javax.swing.JInternalFrame {
 
         MiTablaRemitosInternos tablaRemitos=new MiTablaRemitosInternos();
         Comprobable comp=new RemitosInternos();
-        Facturar fact=new Articulos();
+        Articulable fact=new Articulos();
         ArrayList numeroRem=Depositos.leerRemitosInternos();
         Integer numeroRemi=(Integer)numeroRem.get(0);
         remitoInterno=(RemitosInternos)comp.leerComprobante(numeroRemi);

@@ -10,6 +10,7 @@ import Compras.Remitos;
 import Conversores.Numeros;
 import Depositos.RemitosInternos;
 import interfaces.Adeudable;
+import interfaces.Articulable;
 import interfaces.Comprobable;
 import interfaces.Personalizable;
 import interfacesPrograma.Facturar;
@@ -446,7 +447,7 @@ public class IngresoDeMercaderia extends javax.swing.JInternalFrame {
             if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             //System.out.println("ENTRO CON EL ENTER¡¡¡¡¡¡");
             arti=new Articulos();
-            Facturar fart=new Articulos();
+            Articulable fart=new Articulos();
             arti=(Articulos)fart.cargarPorCodigoDeBarra(jTextField3.getText());
             if(arti.getCodigoDeBarra().equals("")){
                 
@@ -734,7 +735,7 @@ public void recargarBox(){
 private void cargarLista(){
     DefaultListModel modelo=new DefaultListModel();
     ArrayList lista=new ArrayList();
-    Facturar fact=new Articulos();
+    Articulable fact=new Articulos();
     lista=fact.listadoBusqueda(this.jTextField3.getText());
     Iterator il=lista.listIterator();
     Articulos art=new Articulos();

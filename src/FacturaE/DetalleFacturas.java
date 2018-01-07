@@ -5,6 +5,7 @@
  */
 package FacturaE;
 
+import interfaces.Articulable;
 import interfaces.Transaccionable;
 import interfacesPrograma.Facturar;
 import java.sql.ResultSet;
@@ -228,7 +229,7 @@ public class DetalleFacturas implements Facturable,Instalable{
     @Override
     public ArrayList convertirAArticulos(ArrayList listado) {
         Articulos articulo;
-        Facturar fact=new Articulos(); 
+        Articulable fact=new Articulos(); 
         DetalleFacturas detalle=new DetalleFacturas();
         ArrayList listadoA=new ArrayList();
         Iterator it=listado.listIterator();

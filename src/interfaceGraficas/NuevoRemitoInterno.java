@@ -8,6 +8,7 @@ import Conversores.Numeros;
 import Depositos.Depositos;
 import Depositos.RemitosInternos;
 import Impresiones.Impresora;
+import interfaces.Articulable;
 import interfaces.Comprobable;
 import interfaces.Personalizable;
 import interfacesPrograma.Facturar;
@@ -41,7 +42,7 @@ public class NuevoRemitoInterno extends javax.swing.JInternalFrame {
     private void cargarLista(){
         DefaultListModel modelo=new DefaultListModel();
     ArrayList lista=new ArrayList();
-    Facturar fact=new Articulos();
+    Articulable fact=new Articulos();
     lista=fact.listadoBusqueda(this.jTextField1.getText());
     Iterator il=lista.listIterator();
     Articulos art=new Articulos();
@@ -263,7 +264,7 @@ public class NuevoRemitoInterno extends javax.swing.JInternalFrame {
         }
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             String codigo=this.jTextField1.getText();
-            Facturar fact=new Articulos();
+            Articulable fact=new Articulos();
             arti=(Articulos)fact.cargarPorCodigoDeBarra(codigo);
             this.jTextField2.selectAll();
             this.jTextField2.requestFocus();

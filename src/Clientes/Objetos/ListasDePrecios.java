@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import objetos.Conecciones;
 
 /**
@@ -101,6 +103,16 @@ public class ListasDePrecios implements Personalizable{
     @Override
     public ArrayList listarPorCuit(String cuit) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public DefaultComboBoxModel mostrarEnCombo(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel mostrarEnTabla(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -13,6 +13,7 @@ import FacturaE.pdfsJavaGenerador;
 import static facturacion.pantallas.IngresoDePedidos.cliT;
 
 import interfaceGraficas.Inicio;
+import interfaces.Articulable;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
@@ -427,7 +428,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             //System.out.println("ENTRO CON EL ENTER¡¡¡¡¡¡");
             listadoDeBusqueda.clear();
-            Facturar fart=new Articulos();
+            Articulable fart=new Articulos();
             arti=new Articulos();
             arti=(Articulos)fart.cargarPorCodigoDeBarra(jTextField1.getText());
             if(arti.getCodigoDeBarra().equals("")){
@@ -479,7 +480,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         }
         if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
         listadoDeBusqueda=fart.listadoBusqueda(this.jTextField1.getText());
         cargarLista(listadoDeBusqueda);    
         }
@@ -674,7 +675,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         String fecha=dia+"/"+mes+"/"+ano;
         String fecha2=ano+"-"+mes+"-"+dia;
         int comprobanteTipo=8;
-        if(cliT.getCondicionIva().equals("2"))comprobanteTipo=3;
+        if(cliT.getCondicionIva().equals("2"))comprobanteTipo=10;
         if(cliT.getCondicionIva().equals("1")){
             if(montoTotal > 1000){
              if(cliT.getRazonSocial().equals("CONSUMIDOR FINAL") || cliT.getNumeroDeCuit().equals("0"))   {
@@ -850,7 +851,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
         listadoDeBusqueda=fart.listadoBusqueda(this.jTextField1.getText());
         cargarLista(listadoDeBusqueda);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -939,7 +940,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameActivated
 private void cargarLista(ArrayList lista){
     DefaultTableModel modelo=new DefaultTableModel();
-    Modificable mod=new Articulos();
+    Articulable mod=new Articulos();
     modelo=mod.mostrarListadoBusqueda(lista);
     this.jTable2.setModel(modelo);
     columnaNumero=this.jTable2.getColumn("Codigo");

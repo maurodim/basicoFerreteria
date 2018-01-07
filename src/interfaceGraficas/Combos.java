@@ -7,6 +7,7 @@
 package interfaceGraficas;
 
 import Conversores.Numeros;
+import interfaces.Articulable;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -182,7 +183,7 @@ public class Combos extends javax.swing.JDialog {
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
                 if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
-        Facturar fart=new Articulos();
+        Articulable fart=new Articulos();
         ArrayList listadoDeBusqueda=fart.listadoBusqueda(this.jTextField1.getText().toUpperCase());
         cargarLista(listadoDeBusqueda);    
         }

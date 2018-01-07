@@ -1,0 +1,14 @@
+create table rubros (`id` smallint(11) not null,`descripcion` varchar(30) not null);
+alter table rubros add primary key (id);
+alter table rubros modify `id` smallint(11) not null auto_increment;
+insert into rubros (descripcion) values ('ARTICULOS GENERALES');
+alter table articulos add column `idiva` smallint(11) not null default'1';
+CREATE TABLE `tipoiva` (`id` int(11) not null default '0',`fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,`descripcion` varchar(30) not null,`tasa` double not null,`idFiscal` int(11) default '5') ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `condicionesiva` (`id` int(11) not null default '0',`fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,`descripcion` varchar(30) not null,`idFiscal` int(11) default '5') ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `tipoiva` ADD PRIMARY KEY (`ID`);
+ALTER TABLE `condicionesiva` ADD PRIMARY KEY (`ID`);
+ALTER TABLE `tipoiva` MODIFY `id` int(11) not null auto_increment;
+ALTER TABLE `condicionesiva` MODIFY `id` int(11) not null auto_increment;
+insert into tipoiva (descripcion,tasa,idfiscal) values ('21%',0.21,5),('10.5%',0.105,4),('No Gravado',0,1),('Exento',0,2),('0%',0,3),('27%',0.27,6);
+insert into condicionesiva (descripcion,idfiscal) values ('consumidor final',5),('responsable inscripto',1),('exento',4);
+create view `articulosv` as select articulos.id,articulos.barras,articulos.costo,articulos.precio,articulos.idcombo,articulos.nombre,articulos.modificaPrecio,idrubro,articulos.idiva,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where inhabilitado=0;

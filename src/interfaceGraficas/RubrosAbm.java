@@ -4,17 +4,37 @@
  */
 package interfaceGraficas;
 
+import interfaces.Articulable;
+import interfaces.Componable;
+import interfaces.Personalizable;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
+import objetos.Articulos;
+import objetos.Rubros;
+
 /**
  *
  * @author mauro
  */
 public class RubrosAbm extends javax.swing.JInternalFrame {
-
+    private ArrayList lstRubros;
+    private Rubros rubro;
+    private int accion;
+    
     /**
      * Creates new form RubrosAbm
      */
     public RubrosAbm() {
         initComponents();
+        Personalizable per=new Rubros();
+        accion=0;
+        Componable comp=new Rubros();
+        lstRubros=per.listar();
+        this.jComboBox1.setModel(comp.LlenarComboConArray(lstRubros));
+        this.jPanel2.setVisible(false);
     }
 
     /**
@@ -33,9 +53,11 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -44,7 +66,18 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Seleccione Rubro");
 
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Nuevo Rubro");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,11 +105,34 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Nombre");
 
-        jLabel3.setText("Porcentaje de Recargo");
-
-        jTextField2.setText("1.00");
-
         jButton2.setText("Guardar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Seleccionar Articulos");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField2KeyPressed(evt);
+            }
+        });
+
+        jLabel3.setText("Ing. para filtro de buscador");
+
+        jButton4.setText("Des Seleccionar Articulos");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -84,15 +140,19 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -103,11 +163,14 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
+                    .addComponent(jButton3)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -127,15 +190,99 @@ public class RubrosAbm extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        accion=1;
+        this.jPanel2.setVisible(true);
+        this.jTextField1.selectAll();
+        this.jTextField1.requestFocus();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        accion=2;
+        rubro=new Rubros();
+        
+        rubro=(Rubros) lstRubros.get(this.jComboBox1.getSelectedIndex());
+        this.jPanel2.setVisible(true);
+        this.jTextField1.setText(rubro.getDescripcion());
+        this.jTextField1.selectAll();
+        this.jTextField1.requestFocus();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Personalizable pre=new Rubros();
+        if(accion==1){
+            rubro=new Rubros();
+            rubro.setDescripcion(this.jTextField1.getText());
+            pre.agregar(rubro);
+            
+        }
+        if(accion==2){
+            rubro.setDescripcion(this.jTextField1.getText());
+            pre.modificar(rubro);
+        }
+        accion=0;
+        lstRubros.clear();
+        lstRubros=pre.listar();
+        Componable compo=new Rubros();
+        //this.jComboBox1.removeAllItems();
+        this.jComboBox1.setModel(compo.LlenarComboConArray(lstRubros));
+        //this.jComboBox1.requestFocus();
+        this.jPanel2.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+        
+    }//GEN-LAST:event_jTextField2KeyPressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+         Articulable fart=new Articulos();
+            ArrayList listadoDeBusqueda=fart.listadoBusqueda(this.jTextField2.getText().toUpperCase());
+            cargarLista(listadoDeBusqueda,0);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Articulable fart=new Articulos();
+            ArrayList listadoDeBusqueda=fart.listadoPorRubro(rubro.getId());
+            cargarLista(listadoDeBusqueda,1);
+    }//GEN-LAST:event_jButton4ActionPerformed
+private void cargarLista(ArrayList lista,int tipo){
+    //DefaultTableModel modelo=new DefaultTableModel();
+    //Iterator il=lista.listIterator();
+    Articulos art=new Articulos();
+    Articulable aar=new Articulos();
+    
+    ListadoDeArticulos11 listadoDeArt=new ListadoDeArticulos11(rubro.getId(),lista,tipo);
+    //listadoDeArt.setVisible(true);
+    if(tipo==0){
+        listadoDeArt.jTable1.setModel(aar.mostrarListadoParaSeleccionRubro(lista,rubro.getId()));
+        
+    }else{
+        listadoDeArt.jTable1.setModel(aar.mostrarListadoParaSeleccionRubro(lista,rubro.getId()));
+    }
+    //listadoDeArt.setVisible(true);
+    listadoDeArt.jTable1.requestFocus();
+    listadoDeArt.setVisible(true);
+    //int posicion=listadoDeArt.jList1.getSelectedIndex();
+    //Articulos articulo=(Articulos)lista.get(posicion);
+    //System.out.println(" codigo elegido "+articulo.getCodigoAsignado());
+        //ArticulosMod articM=new ArticulosMod(articulo);
+        //Inicio.jDesktopPane1.add(articM);
+        //articM.setVisible(true);
+        //articM.toFront();
+    
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -8,6 +8,7 @@ import Actualizaciones.BkDeConeccion;
 import Conversores.Numeros;
 import Clientes.Objetos.ClientesTango;
 import interfaceGraficas.Inicio;
+import interfaces.Articulable;
 import interfaces.Transaccionable;
 import interfacesPrograma.Cajeables;
 import interfacesPrograma.Facturar;
@@ -865,7 +866,7 @@ public class Cajas extends Sucursales implements Cajeables{
                ClientesTango cliente;
                Articulos articulo;
                ArrayList art=new ArrayList();
-               Facturar fact=new Articulos();
+               Articulable fact=new Articulos();
                String renglon="";
                int reg=0;
                Double cant=0.00;

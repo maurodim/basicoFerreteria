@@ -10,6 +10,7 @@ import Sucursales.Usuarios;
 import interfaceGraficas.Inicio;
 import interfaceGraficas.LoguinBbsGestion;
 import interfaces.Comprobable;
+import interfaces.Rubable;
 import interfaces.Transaccionable;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import objetos.ConeccionLocal;
 import objetos.Conecciones;
+import objetos.Rubros;
 
 /**
  *
@@ -120,6 +122,7 @@ public class BbsGestion {
          }
       }
         Propiedades.CargarPropiedades();
+        
         LoguinBbsGestion lBb=new LoguinBbsGestion();
         lBb.setVisible(true);
         lBb.pack();

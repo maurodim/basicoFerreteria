@@ -6,6 +6,8 @@ package Sucursales;
 
 import interfaces.Personalizable;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -141,6 +143,16 @@ public class Clientes extends Sucursales implements Personalizable{
     @Override
     public ArrayList listarPorCuit(String cuit) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public DefaultComboBoxModel mostrarEnCombo(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel mostrarEnTabla(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

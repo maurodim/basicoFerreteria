@@ -17,6 +17,8 @@ public class ListadoDeArticulos11 extends javax.swing.JDialog {
     private Integer rubroId;
     private ArrayList lstArticulos;
     private Integer tipo;
+    private int obb;
+    
     /**
      * Creates new form ListadoDeArticulos
      */
@@ -35,6 +37,17 @@ public class ListadoDeArticulos11 extends javax.swing.JDialog {
         }
     }
 
+    public ListadoDeArticulos11(Integer rubroId, ArrayList lstArticulos, Integer tipo, int obb) {
+        initComponents();
+        this.rubroId = rubroId;
+        this.lstArticulos = lstArticulos;
+        this.tipo = tipo;
+        this.obb = obb;
+        if(tipo==1){
+            this.jButton1.setText("Quitar Proveedor");
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -134,10 +147,19 @@ public class ListadoDeArticulos11 extends javax.swing.JDialog {
                 }
             }
         }
-        if(tipo==0){
-            aar.asignarMasivoRubros(seleccionados,rubroId);
+        if(obb==0){
+            if(tipo==0){
+                aar.asignarMasivoRubros(seleccionados,rubroId);
+            }else{
+                aar.desAsignarMasivoRubros(seleccionados);
+            }
         }else{
-            aar.desAsignarMasivoRubros(seleccionados);
+            //Proveedores
+            if(tipo==0){
+                aar.asignarMasivoProveedor(seleccionados,rubroId);
+            }else{
+                aar.desAsignarMasivoProveedor(seleccionados);
+            }
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

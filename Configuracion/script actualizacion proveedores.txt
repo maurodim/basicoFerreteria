@@ -1,0 +1,1 @@
+alter table `proveedores` modify `numero` int(11) not null auto_increment;

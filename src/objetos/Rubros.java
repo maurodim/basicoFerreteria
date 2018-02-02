@@ -266,6 +266,9 @@ public class Rubros implements Componable,Personalizable,Rubable{
             case 3:
                 sql="update articulos set SERVICIO=(SERVICIO * "+porciento+") where idrubro="+idRubro;
                 break;
+            case 4:
+                sql="update articulos set PRECIO=(COSTO * "+porciento+") where idrubro="+idRubro;
+                break;
         }
         Transaccionable tra=new Conecciones();
         tra.guardarRegistro(sql);

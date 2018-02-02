@@ -60,6 +60,25 @@ public class Articulos implements Articulable{
     private static Transaccionable tra=new ConeccionLocal();
     private static ResultSet rr;
     private Integer idRenglon;
+    private String nombreProveedor;
+    private Integer idProveedor;
+
+    public String getNombreProveedor() {
+        return nombreProveedor;
+    }
+
+    public void setNombreProveedor(String nombreProveedor) {
+        this.nombreProveedor = nombreProveedor;
+    }
+
+    public Integer getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(Integer idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+    
 
     public Integer getIdRenglon() {
         return idRenglon;
@@ -737,8 +756,8 @@ public class Articulos implements Articulable{
         ArrayList resultado=new ArrayList();
         Articulos articulo=null;
         criterio=criterio.toUpperCase();
-        String sql="select *,(SELECT articulos.SERVICIO from articulos where articulos.ID=articulosv.id)as servicio from articulosv where nombre like '%"+criterio+"%'";
-        
+        //String sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where nombre like '%"+criterio+"%'";
+        String sql="select articulos.*,proveedores.nombre as nombreProveedor,(select sum(movimientosarticulos.cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos left join proveedores on proveedores.numero=articulos.PROVEEDOR where articulos.nombre like '%"+criterio+"%'";
         //Transaccionable tra=new ConeccionLocal();
         rr=tra.leerConjuntoDeRegistros(sql);
         try {
@@ -772,6 +791,8 @@ public class Articulos implements Articulable{
                 String nom=rr.getString("NOMBRE");
                 articulo.setIdCombo(rr.getInt("idcombo"));
                 articulo.setRubro(rr.getInt("idrubro"));
+                articulo.setIdProveedor(rr.getInt("PROVEEDOR"));
+                articulo.setNombreProveedor(rr.getString("nombreProveedor"));
                 if(articulo.getIdCombo() > 0)articulo.setCombo(CargarCombo(articulo.getNumeroId()));
                 resultado.add(articulo);
             }
@@ -870,8 +891,10 @@ public class Articulos implements Articulable{
     public Object cargarPorCodigoDeBarra(String codigoDeBarra) {
         //Articulos articulo;
         //articulo=(Articulos)listadoBarr.get(codigoDeBarra);
+        String sql;
         
-        String sql="select *,(SELECT articulos.SERVICIO from articulos where articulos.ID=articulosv.id)as servicio from articulosv where BARRAS like '"+codigoDeBarra+"'";
+            sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where BARRAS like '"+codigoDeBarra+"'";
+        
         rr=tra.leerConjuntoDeRegistros(sql);
         Articulos articulo=new Articulos();
         
@@ -1283,7 +1306,8 @@ public class Articulos implements Articulable{
         modelo.addColumn("Descripcion");
         modelo.addColumn("Costo");
         modelo.addColumn("Precio");
-        Object [] fila=new Object[5];
+        modelo.addColumn("Proveedor");
+        Object [] fila=new Object[6];
         while(it.hasNext()){
             articulo=(Articulos)it.next();
             if(articulo.getRubro()==idRubro){
@@ -1295,7 +1319,7 @@ public class Articulos implements Articulable{
             fila[2]=articulo.getDescripcionArticulo();
             fila[3]=" $"+Numeros.ConvertirNumero(articulo.getPrecioDeCosto());
             fila[4]=" $"+Numeros.ConvertirNumero(articulo.getPrecioUnitarioNeto());
-            
+            fila[5]=articulo.getNombreProveedor();
             //modelo.addElement(articulo.getDescripcionArticulo()+" $"+Numeros.ConvertirNumero(articulo.getPrecioUnitarioNeto()));
             modelo.addRow(fila);
         }
@@ -1403,6 +1427,65 @@ public class Articulos implements Articulable{
             tra.guardarRegistro(sql);
         }
         
+    }
+
+    @Override
+    public DefaultTableModel mostrarListadoParaSeleccionDeProveedor(ArrayList listado, Integer idRubro) {
+        MiModeloTablaContacto modelo=new MiModeloTablaContacto();
+        Iterator it=listado.listIterator();
+        Articulos articulo=new Articulos();
+        modelo.addColumn("Seleccion");
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Descripcion");
+        modelo.addColumn("Costo");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Proveedor");
+        Object [] fila=new Object[6];
+        while(it.hasNext()){
+            articulo=(Articulos)it.next();
+            if(articulo.getIdProveedor()==idRubro){
+                fila[0]=true;
+            }else{
+                fila[0]=false;
+            }
+            fila[1]=String.valueOf(articulo.getCodigoDeBarra());
+            fila[2]=articulo.getDescripcionArticulo();
+            fila[3]=" $"+Numeros.ConvertirNumero(articulo.getPrecioDeCosto());
+            fila[4]=" $"+Numeros.ConvertirNumero(articulo.getPrecioUnitarioNeto());
+            fila[5]=articulo.getNombreProveedor();
+            //modelo.addElement(articulo.getDescripcionArticulo()+" $"+Numeros.ConvertirNumero(articulo.getPrecioUnitarioNeto()));
+            modelo.addRow(fila);
+        }
+        return modelo;
+    }
+
+    @Override
+    public void asignarMasivoProveedor(ArrayList listado, Integer idRubro) {
+        String sql;
+        Articulos articulo;
+        Iterator it=listado.listIterator();
+        while(it.hasNext()){
+            articulo=(Articulos) it.next();
+            sql="update articulos set PROVEEDOR="+idRubro+" where id="+articulo.numeroId;
+            tra.guardarRegistro(sql);
+        }
+    }
+
+    @Override
+    public ArrayList listadoPorProveedor(Integer idR) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void desAsignarMasivoProveedor(ArrayList listado) {
+        String sql;
+        Articulos articulo;
+        Iterator it=listado.listIterator();
+        while(it.hasNext()){
+            articulo=(Articulos) it.next();
+            sql="update articulos set PROVEEDOR=0 where id="+articulo.numeroId;
+            tra.guardarRegistro(sql);
+        }
     }
     
     

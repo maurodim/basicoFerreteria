@@ -56,6 +56,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
     private TableColumn columnaPrecio;
     private Double subTotal;
     private Double porcentajeDescuento;
+    private int pressBusqueda;
     
     public IngresoDePedidos() {
         //Articulos.CargarMap();
@@ -72,6 +73,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
         jLabel10.setText(cliT.getRazonSocial());
         this.jCheckBox2.setEnabled(false);
         this.jTextField1.requestFocus();
+        pressBusqueda=0;
         //this.jPanel2.requestFocus();
         
     }
@@ -483,7 +485,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 this.jLabel7.setVisible(false);
                 this.jTextField4.setVisible(false);
                 
-
+                /*
                 if(arti.getPrecioServicio() > 0){
                     this.jLabel7.setVisible(true);
                     this.jTextField4.setVisible(true);
@@ -504,15 +506,18 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                         }
                         }
                 }
+                */
             }
             
             if(cliT.getCondicionDeVenta()==2)this.jCheckBox2.setEnabled(true);
             this.jTextField2.selectAll();
             this.jTextField2.requestFocus();
             }
+            pressBusqueda=0;
         }
         if(evt.getKeyCode()==KeyEvent.VK_F1){
             //System.out.println("ENTRO CON F1¡¡¡¡¡");
+            pressBusqueda=1;
         Articulable fart=new Articulos();
             listadoDeBusqueda=fart.listadoBusqueda(jTextField1.getText());
             //listadoDeBusqueda=fart.listadoBusquedaMayorista(this.jTextField1.getText(),cliT.getListaDePrecios());
@@ -649,9 +654,9 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 this.jTextField4.selectAll();
                 this.jTextField4.requestFocus();
             }else{
-                if(arti.getPrecioServicio()>0){
-                 this.jTextField4.requestFocus();   
-                }else{
+                //if(arti.getPrecioServicio()>0){
+                // this.jTextField4.requestFocus();   
+                //}else{
                     Articulos articul=new Articulos();
                     articul.setCantidad(cantt);
                     articul.setCodigoAsignado(arti.getCodigoAsignado());
@@ -676,7 +681,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
             this.jTextField1.setText("");
             this.jTextField2.setText("");
             this.jTextField1.requestFocus();
-                }
+               // }
                 }
             }else{
                 JOptionPane.showMessageDialog(this,"LA CANTIDAD INGRESADA ES EXCESIVA, POR FAVOR VERIFÍQUELA");

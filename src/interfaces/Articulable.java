@@ -52,4 +52,8 @@ public interface Articulable {
     public void asignarMasivoRubros(ArrayList listado,Integer idRubro);
     public ArrayList listadoPorRubro(Integer idR);
     public void desAsignarMasivoRubros(ArrayList listado);
+    public DefaultTableModel mostrarListadoParaSeleccionDeProveedor(ArrayList listado,Integer idRubro);
+    public void asignarMasivoProveedor(ArrayList listado,Integer idRubro);
+    public ArrayList listadoPorProveedor(Integer idR);
+    public void desAsignarMasivoProveedor(ArrayList listado);
 }

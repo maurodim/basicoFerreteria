@@ -5,6 +5,7 @@
 package Compras;
 
 import interfaceGraficas.Inicio;
+import interfaces.Componable;
 import interfaces.Personalizable;
 import interfaces.Transaccionable;
 import java.sql.ResultSet;
@@ -17,7 +18,9 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import objetos.Articulos;
 import objetos.ConeccionLocal;
@@ -27,7 +30,7 @@ import objetos.Conecciones;
  *
  * @author mauro
  */
-public class Proveedores implements Personalizable{
+public class Proveedores implements Personalizable,Componable{
     private int numero;
     private String nombre;
     private String direccion;
@@ -459,6 +462,61 @@ public class Proveedores implements Personalizable{
 
     @Override
     public DefaultTableModel mostrarEnTabla(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel LlenarList(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel LlenarTabla(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ComboBoxModel LlenarCombo(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultListModel LlenarListConArray(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel LlenarTablaConArray(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ComboBoxModel LlenarComboConArray(ArrayList listado) {
+        Proveedores proveedor=new Proveedores();
+        //listaProv=new ArrayList();
+        //Personalizable per=new Proveedores();
+        DefaultComboBoxModel modelo=new DefaultComboBoxModel();
+        //listaProv=per.listar();
+        Iterator ilProv=listado.listIterator();
+        while(ilProv.hasNext()){
+            proveedor=(Proveedores)ilProv.next();
+            modelo.addElement(proveedor.getNombre());
+        }
+        return modelo;
+    }
+
+    @Override
+    public int posicionEnCombo(Object objeto, ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel LlenarTablaConArrayEnDolares(ArrayList listado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public DefaultTableModel LlenarTablaConArrayEnMonedas(ArrayList listado, Object moneda) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

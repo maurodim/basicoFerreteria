@@ -758,6 +758,7 @@ public class Articulos implements Articulable{
         criterio=criterio.toUpperCase();
         //String sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where nombre like '%"+criterio+"%'";
         String sql="select articulos.*,proveedores.nombre as nombreProveedor,(select sum(movimientosarticulos.cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos left join proveedores on proveedores.numero=articulos.PROVEEDOR where articulos.nombre like '%"+criterio+"%'";
+        //String sql="select * from articulos left join (select sum(movimientosarticulos.cantidad)as sstock,movimientosarticulos.idArticulo FROM movimientosarticulos group by idArticulo,numeroDeposito limit 0,1) movimientosarticulos on articulos.ID=movimientosarticulos.idArticulo where articulos.nombre like '%"+criterio+"%'";
         //Transaccionable tra=new ConeccionLocal();
         rr=tra.leerConjuntoDeRegistros(sql);
         try {

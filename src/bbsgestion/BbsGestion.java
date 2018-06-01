@@ -7,6 +7,7 @@ package bbsgestion;
 import Compras.Remitos;
 import Configuracion.Propiedades;
 import Sucursales.Usuarios;
+import bienvenida.Bienvenida;
 import interfaceGraficas.Inicio;
 import interfaceGraficas.LoguinBbsGestion;
 import interfaces.Comprobable;
@@ -19,12 +20,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import objetos.ConeccionLocal;
 import objetos.Conecciones;
 import objetos.Rubros;
+import pantalla.Ventana;
 
 /**
  *
@@ -41,6 +47,18 @@ public class BbsGestion {
         Usuarios usuarios=new Usuarios();
         usuariosList=usuarios.listarUsuario();
         */
+        //Bienvenida bienvenida=new Bienvenida();
+        try{
+           UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+            //UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
+            //UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+            //UIManager.setLookAndFeel("ch.randelshofer.quaqua.BasicQuaquaLookAndFeel");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Ventana ventana=new Ventana();
+        ventana.setVisible(true);
+        
         File folder=new File("C:\\Gestion");
         File archivos=new File("C:\\Informes");
         File bases=new File("C:\\Gestion\\DB");
@@ -122,7 +140,11 @@ public class BbsGestion {
          }
       }
         Propiedades.CargarPropiedades();
-        
+        try {
+            sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BbsGestion.class.getName()).log(Level.SEVERE, null, ex);
+        }
         LoguinBbsGestion lBb=new LoguinBbsGestion();
         lBb.setVisible(true);
         lBb.pack();

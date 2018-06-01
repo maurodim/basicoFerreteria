@@ -8,13 +8,8 @@ import Compras.Proveedores;
 import interfaces.Articulable;
 import interfaces.Componable;
 import interfaces.Personalizable;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
-import javax.swing.DefaultListModel;
-import javax.swing.table.DefaultTableModel;
 import objetos.Articulos;
-import objetos.Rubros;
 
 /**
  *

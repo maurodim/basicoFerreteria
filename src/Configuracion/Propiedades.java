@@ -6,10 +6,7 @@
 package Configuracion;
 
 import Conversores.Numeros;
-import ObjetosBackUp.BackUp;
-import ObjetosBackUp.Backapear;
 import interfaces.Transaccionable;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

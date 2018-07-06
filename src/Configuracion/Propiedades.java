@@ -58,7 +58,13 @@ public class Propiedades {
     static String SKEY;
     static String RAZONSOCIAL;
     static String MODULORUBROS;
+    static String DUMP;
 
+    public static String getDUMP() {
+        return DUMP;
+    }
+
+    
     public static String getMODULORUBROS() {
         return MODULORUBROS;
     }
@@ -274,6 +280,7 @@ public class Propiedades {
                             SKEY=p.getProperty("SKEY");
                             RAZONSOCIAL=p.getProperty("RAZONSOCIAL");
                             MODULORUBROS=p.getProperty("MODULORUBROS");
+                            DUMP=p.getProperty("DUMP");
                             
                         
                     

@@ -712,7 +712,7 @@ public class BackUp implements Backapear{
     public String GenerarArchivos() {
         String archivoDestino=Propiedades.getARCHIVOBK();
         try {
-            Process p=Runtime.getRuntime().exec(Propiedades.getDUMP()+"mysqldump -h "+Propiedades.getSERVER()+" -u "+Propiedades.getUSUARIO()+" -p"+Propiedades.getCLAVE().trim()+" pocoprecio2");
+            Process p=Runtime.getRuntime().exec(Propiedades.getDUMP()+"mysqldump -h "+Propiedades.getSERVER()+" -u "+Propiedades.getUSUARIO()+" -p"+Propiedades.getCLAVE().trim()+" "+Propiedades.getBD());
             new HiloLector(p.getErrorStream()).start();
             System.out.println("C:/xampp/mysql/bin/mysql -h "+Propiedades.getSERVER()+" -u "+Propiedades.getUSUARIO()+" -p"+Propiedades.getCLAVE().trim()+" pocoprecio2");
             InputStream is=p.getInputStream();

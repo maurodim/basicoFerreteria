@@ -4,32 +4,18 @@
  */
 package bbsgestion;
 
-import Compras.Remitos;
 import Configuracion.Propiedades;
-import Sucursales.Usuarios;
-import bienvenida.Bienvenida;
-import interfaceGraficas.Inicio;
 import interfaceGraficas.LoguinBbsGestion;
-import interfaces.Comprobable;
-import interfaces.Rubable;
-import interfaces.Transaccionable;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import objetos.ConeccionLocal;
-import objetos.Conecciones;
-import objetos.Rubros;
 import pantalla.Ventana;
 
 /**

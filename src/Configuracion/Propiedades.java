@@ -59,6 +59,32 @@ public class Propiedades {
     static String RAZONSOCIAL;
     static String MODULORUBROS;
     static String DUMP;
+    static String ARCHIVOKEY;
+    static String ARCHIVOCRT;
+    static String CONDICIONIVA;
+    static String PUNTODEVENTA;
+    static String TIPODEVENTA;
+
+    public static String getCONDICIONIVA() {
+        return CONDICIONIVA;
+    }
+
+    public static String getPUNTODEVENTA() {
+        return PUNTODEVENTA;
+    }
+
+    public static String getTIPODEVENTA() {
+        return TIPODEVENTA;
+    } 
+
+    public static String getARCHIVOKEY() {
+        return ARCHIVOKEY;
+    }
+
+    public static String getARCHIVOCRT() {
+        return ARCHIVOCRT;
+    }
+    
 
     public static String getDUMP() {
         return DUMP;
@@ -281,6 +307,12 @@ public class Propiedades {
                             RAZONSOCIAL=p.getProperty("RAZONSOCIAL");
                             MODULORUBROS=p.getProperty("MODULORUBROS");
                             DUMP=p.getProperty("DUMP");
+                            ARCHIVOKEY=p.getProperty("ARCHIVOKEY");
+                            ARCHIVOCRT=p.getProperty("ARCHIVOCRT");
+                            CONDICIONIVA=p.getProperty("CONDICIONIVA");
+                            PUNTODEVENTA=p.getProperty("PUNTODEVENTA");
+                            TIPODEVENTA=p.getProperty("TIPODEVENTA");
+                            
                             
                         
                     

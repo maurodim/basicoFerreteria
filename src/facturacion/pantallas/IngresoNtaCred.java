@@ -8,8 +8,8 @@ import Clientes.Objetos.ClientesTango;
 import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
 import Conversores.Numeros;
-import FacturaE.FacturaElectronica;
-import FacturaE.pdfsJavaGenerador;
+import FacturaEx.FacturaElectronica;
+import FacturaEx.pdfsJavaGenerador;
 import static facturacion.pantallas.IngresoDePedidos.cliT;
 
 import interfaceGraficas.Inicio;

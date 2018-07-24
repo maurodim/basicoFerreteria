@@ -8,11 +8,10 @@ import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
 import Conversores.Numeros;
 import Clientes.Objetos.ClientesTango;
-import FacturaE.FacturaElectronica;
-import FacturaE.pdfsJavaGenerador;
+import Configuracion.Propiedades;
 import interfaceGraficas.Inicio;
 import interfaces.Articulable;
-import interfaces.Modificable;
+import interfaces.FacturableE;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
 import java.io.FileWriter;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -29,10 +29,11 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.xml.parsers.ParserConfigurationException;
 import objetos.Articulos;
 import objetos.Comprobantes;
-import org.xml.sax.SAXException;
+import objetos.DetalleFacturas;
+import objetos.FacturaElectronica;
+import objetos.TiposIva;
 import tablas.MiModeloTablaFacturacion;
 
 
@@ -1058,7 +1059,44 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 Facturar fat=new Comprobantes();
                 fat.guardar(comprobante);
                 // aqui hago el envio a factura  electronica, si aprueba no imprime
-
+                
+                FacturaElectronica fe=new FacturaElectronica();
+                FacturableE fact=new FacturaElectronica();
+                ArrayList listadoIva=new ArrayList();
+                Double montoIva=0.00;
+                if(montoTotal > subTotal){
+                    float subT=Float.parseFloat(String.valueOf(subTotal));
+                    float totT=Float.parseFloat(String.valueOf(tot));
+                    TiposIva iva=new TiposIva(5,subT,totT,21);
+                    listadoIva.add(iva);
+                    montoIva=tot;
+                }else{
+                    listadoIva=null;
+                }
+                ArrayList listadoTrib=null;
+                ArrayList <DetalleFacturas> listadoDetalle=new ArrayList();
+                Iterator itD=detalleDelPedido.listIterator();
+                Articulos artic;
+                DetalleFacturas detalle;
+                double precio=0.00;
+                while(itD.hasNext()){
+                    artic=(Articulos) itD.next();
+                    detalle=new DetalleFacturas();
+                    detalle.setCodigo(artic.getCodigoAsignado());
+                    detalle.setDescripcion(artic.getDescripcionArticulo());
+                    detalle.setCantidadS(String.valueOf(artic.getCantidad()));
+                    precio=Math.round((artic.getCantidad() * artic.getPrecioUnitarioNeto()) /100.0) * 100.0;
+                    detalle.setPrecioUnitarioS(String.valueOf(precio));
+                    listadoDetalle.add(detalle);
+                }
+                //montoIva=tot;
+                System.out.println(Propiedades.getARCHIVOCRT());
+                int condicion=Integer.parseInt(Propiedades.getCONDICIONIVA());
+                int ptoVta=Integer.parseInt(Propiedades.getPUNTODEVENTA());
+                int tipoVta=Integer.parseInt(Propiedades.getTIPODEVENTA());
+                System.out.println("COMPROBANTE FISCAL N° "+fact.generar(null, condicion, Propiedades.getARCHIVOKEY(),Propiedades.getARCHIVOCRT(),cliT.getCodigoId(), cliT.getNumeroDeCuit(), comprobante.getTipoComprobante(), montoTotal, subTotal, montoIva, ptoVta, Propiedades.getCUIT(), tipoVta, listadoIva, listadoTrib, cliT.getRazonSocial(), cliT.getDireccion(), cliT.getCondicionIva(), listadoDetalle));
+                
+                /*
                 FacturaElectronica fe=new FacturaElectronica();
                 try {
 
@@ -1069,14 +1107,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                         pdf.setDoc(fe);
                         pdf.setCliente(cliT);
                         pdf.run();
-                        /*
-                        ImprimirFactura imprimir=new ImprimirFactura();
-                        try {
-                            imprimir.ImprimirFactura(comprobante.getNumero(),comprobante.getTipoComprobante());
-                        } catch (IOException ex) {
-                            Logger.getLogger(IngresoDeFacturas.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        */
+                        
 
                     }else{
                         if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
@@ -1090,6 +1121,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 } catch (SAXException ex) {
                     Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                */
                 /*
                 * ACA DEBO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
                 *

@@ -1085,7 +1085,8 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                     detalle.setCodigo(artic.getCodigoAsignado());
                     detalle.setDescripcion(artic.getDescripcionArticulo());
                     detalle.setCantidadS(String.valueOf(artic.getCantidad()));
-                    precio=Math.round((artic.getCantidad() * artic.getPrecioUnitarioNeto()) /100.0) * 100.0;
+                    
+                    precio=Math.round((artic.getCantidad() * artic.getPrecioUnitarioNeto()) * 100.0) / 100.0;
                     detalle.setPrecioUnitarioS(String.valueOf(precio));
                     listadoDetalle.add(detalle);
                 }
@@ -1094,7 +1095,9 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 int condicion=Integer.parseInt(Propiedades.getCONDICIONIVA());
                 int ptoVta=Integer.parseInt(Propiedades.getPUNTODEVENTA());
                 int tipoVta=Integer.parseInt(Propiedades.getTIPODEVENTA());
-                System.out.println("COMPROBANTE FISCAL N° "+fact.generar(null, condicion, Propiedades.getARCHIVOKEY(),Propiedades.getARCHIVOCRT(),cliT.getCodigoId(), cliT.getNumeroDeCuit(), comprobante.getTipoComprobante(), montoTotal, subTotal, montoIva, ptoVta, Propiedades.getCUIT(), tipoVta, listadoIva, listadoTrib, cliT.getRazonSocial(), cliT.getDireccion(), cliT.getCondicionIva(), listadoDetalle));
+                Integer idPed=0;
+                //if(pedido.getId() != null)idPed=pedido.getId();
+                System.out.println("COMPROBANTE FISCAL N° "+fact.generar(null, condicion, Propiedades.getARCHIVOKEY(),Propiedades.getARCHIVOCRT(),cliT.getCodigoId(), cliT.getNumeroDeCuit(), comprobante.getTipoComprobante(), montoTotal, subTotal, montoIva, ptoVta, Propiedades.getCUIT(), tipoVta, listadoIva, listadoTrib, cliT.getRazonSocial(), cliT.getDireccion(), cliT.getCondicionIva(), listadoDetalle,idPed));
                 
                 /*
                 FacturaElectronica fe=new FacturaElectronica();

@@ -7,13 +7,13 @@ package facturacion.pantallas;
 import Clientes.Objetos.ClientesTango;
 import Clientes.Pantallas.NuevoCliente;
 import Clientes.Pantallas.SeleccionDeClientes;
+import Configuracion.Propiedades;
 import Conversores.Numeros;
-import FacturaEx.FacturaElectronica;
-import FacturaEx.pdfsJavaGenerador;
-import static facturacion.pantallas.IngresoDePedidos.cliT;
 
 import interfaceGraficas.Inicio;
+
 import interfaces.Articulable;
+import interfaces.FacturableE;
 import interfaces.Modificable;
 import interfacesPrograma.Facturar;
 import java.awt.event.KeyEvent;
@@ -32,8 +32,12 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.xml.parsers.ParserConfigurationException;
+import objetos.DetalleFacturas;
+import objetos.TiposIva;
 import objetos.Articulos;
 import objetos.Comprobantes;
+import objetos.DetalleFacturas;
+import objetos.FacturaElectronica;
 import org.xml.sax.SAXException;
 import tablas.MiModeloTablaFacturacion;
 
@@ -56,6 +60,9 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
     private TableColumn columnaNumero;
     private TableColumn columnaDescripcion;
     private TableColumn columnaPrecio;
+     private Double subTotal;
+    private Double porcentajeDescuento;
+    private int pressBusqueda;
     
     public IngresoNtaCred() {
         //Articulos.CargarMap();
@@ -691,6 +698,7 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
         if(cliT.getCondicionIva().equals("3"))comprobanteTipo=8;
         
         Comprobantes comprobante=new Comprobantes();
+        comprobante.setFe(true);
         comprobante.setCliente(cliT);
         comprobante.setTipoMovimiento(1);
         comprobante.setTipoComprobante(comprobanteTipo);
@@ -724,20 +732,26 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
             }
         }
         //montoTotal=montoTo;
-            Double subTotal=montoTotal;
-            Double ivv=subTotal * 0.21;
+            montoTotal=Math.round(montoTotal * 100.0) / 100.0;
+            subTotal=montoTotal / 1.21;
+            //Double ivv=subTotal / 1.21;
+            subTotal=Math.round(subTotal * 100.0) / 100.0;
+            //Double ivv=Math.round(ivv * 100.0) / 100.0;
             Double sub=0.00;
-            Double tot=montoTotal + ivv;
-            Double porcentajeDescuento=0.00;
+            Double tot=montoTotal - subTotal;
+            tot=Math.round(tot * 100.0) /100.0;
+            porcentajeDescuento=0.00;
             if(porcentajeDescuento > 0.00){
                 sub = subTotal * porcentajeDescuento;
                 sub= montoTotal - sub;
             }else{
                 sub=montoTotal;
             }
-
-            comprobante.setMontoTotal(sub);
-            comprobante.setSubTotal(montoTotal);
+            
+            comprobante.setMontoTotal(montoTotal);
+            comprobante.setSubTotal(subTotal);
+            comprobante.setMontoIva(tot);
+            comprobante.setMontoBruto(subTotal);
             Double descuen=montoTotal - sub;
             comprobante.setDescuento(descuen);
             comprobante.setPorcentajeDescuento(porcentajeDescuento);
@@ -754,72 +768,101 @@ public class IngresoNtaCred extends javax.swing.JInternalFrame {
             
         }
         if(noFacturar==0){
-            Facturar fat=new Comprobantes();
-            //EpsonTicket impresoraFiscal=new EpsonTicket();
-            
             comprobante.setFiscal(1);
-            comprobante.setFe(true);
-            fat.guardar(comprobante);
-            FacturaElectronica fe=new FacturaElectronica();
-               comprobante.setMontoBruto(comprobante.getMontoBruto() * -1);
-               comprobante.setMontoIva(comprobante.getMontoIva() * -1);
-               comprobante.setMontoTotal(comprobante.getMontoTotal() * -1);
+                Facturar fat=new Comprobantes();
+                fat.guardar(comprobante);
+                // aqui hago el envio a factura  electronica, si aprueba no imprime
+                
+                FacturaElectronica fe=new FacturaElectronica();
+                FacturableE fact=new FacturaElectronica();
+                ArrayList listadoIva=new ArrayList();
+                Double montoIva=0.00;
+                if(montoTotal > subTotal){
+                    float subT=Float.parseFloat(String.valueOf(subTotal));
+                    float totT=Float.parseFloat(String.valueOf(tot));
+                    TiposIva iva=new TiposIva(5,subT,totT,21);
+                    listadoIva.add(iva);
+                    montoIva=tot;
+                }else{
+                    listadoIva=null;
+                }
+                ArrayList listadoTrib=null;
+                ArrayList <DetalleFacturas> listadoDetalle=new ArrayList();
+                Iterator itD=detalleDelPedido.listIterator();
+                Articulos artic;
+                DetalleFacturas detalle;
+                double precio=0.00;
+                while(itD.hasNext()){
+                    artic=(Articulos) itD.next();
+                    detalle=new DetalleFacturas();
+                    detalle.setCodigo(artic.getCodigoAsignado());
+                    detalle.setDescripcion(artic.getDescripcionArticulo());
+                    detalle.setCantidadS(String.valueOf(artic.getCantidad()));
+                    
+                    precio=Math.round((artic.getCantidad() * artic.getPrecioUnitarioNeto()) * 100.0) / 100.0;
+                    detalle.setPrecioUnitarioS(String.valueOf(precio));
+                    listadoDetalle.add(detalle);
+                }
+                //montoIva=tot;
+                System.out.println(Propiedades.getARCHIVOCRT());
+                int condicion=Integer.parseInt(Propiedades.getCONDICIONIVA());
+                int ptoVta=Integer.parseInt(Propiedades.getPUNTODEVENTA());
+                int tipoVta=Integer.parseInt(Propiedades.getTIPODEVENTA());
+                Integer idPed=0;
+                //if(pedido.getId() != null)idPed=pedido.getId();
+                System.out.println("COMPROBANTE FISCAL N° "+fact.generar(null, condicion, Propiedades.getARCHIVOKEY(),Propiedades.getARCHIVOCRT(),cliT.getCodigoId(), cliT.getNumeroDeCuit(), comprobante.getTipoComprobante(), montoTotal, subTotal, montoIva, ptoVta, Propiedades.getCUIT(), tipoVta, listadoIva, listadoTrib, cliT.getRazonSocial(), cliT.getDireccion(), cliT.getCondicionIva(), listadoDetalle,idPed));
+                
+                /*
+                FacturaElectronica fe=new FacturaElectronica();
+                try {
 
-            try {
-                fe=(FacturaElectronica) fe.leer(comprobante);
-                if(fe.getRespuesta().equals("OK")){
+                    fe=(FacturaElectronica) fe.leer(comprobante);
+                    if(fe.getRespuesta().equals("OK")){
                         //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
                         pdfsJavaGenerador pdf=new pdfsJavaGenerador();
                         pdf.setDoc(fe);
                         pdf.setCliente(cliT);
                         pdf.run();
+                        
+
                     }else{
                         if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
                         JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
                     }
-            } catch (IOException ex) {
-                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(IngresoNtaCred.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                    
-            
-            /*
-            * ACA DEVO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
-            *
-            */
-            //comp.setTipoComprobante(comprobanteTipo);
-            //comp.setMontoTotal(montoTotal);
-                    
-            
-            /*
-            * ACA DEVO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
-            *
-            */
-            //comp.setTipoComprobante(comprobanteTipo);
-            //comp.setMontoTotal(montoTotal);
+                } catch (IOException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println(ex);
+                } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SAXException ex) {
+                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                */
+                /*
+                * ACA DEBO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
+                *
+                */
+                //comp.setTipoComprobante(comprobanteTipo);
+                //comp.setMontoTotal(montoTotal);
+                detalleDelPedido.clear();
+                agregarRenglonTabla();
+                this.jCheckBox2.setSelected(true);
+                //this.jCheckBox2.setEnabled(false);
+                this.jTable2.removeAll();
+                listadoDeBusqueda.clear();
+                cargarLista(listadoDeBusqueda);
+                //cliT=new Clientes("99");
+                this.jLabel6.setText(cliT.getRazonSocial());
+                this.jTextField2.setText("");
+                jTextField1.setText("");
+                jTextField1.requestFocus();
         
         }else{
             JOptionPane.showMessageDialog(this,"El cliente supera el límite de crédito, debe abonar la venta");
             noFacturar=0;
             ok=1;
         }
-        if(ok==0){
-                detalleDelPedido.clear();
-        agregarRenglonTabla();
-        this.jCheckBox2.setSelected(true);
-        this.jCheckBox2.setEnabled(false);
-        this.jTable2.removeAll();
-        listadoDeBusqueda.clear();
-        cargarLista(listadoDeBusqueda);
-        cliT=new ClientesTango("999999");
-        this.jLabel6.setText(cliT.getRazonSocial());
-        this.jTextField2.setText("");
-        jTextField1.setText("");
-        jTextField1.requestFocus();
-        }
+        
             
     }//GEN-LAST:event_jButton1ActionPerformed
 

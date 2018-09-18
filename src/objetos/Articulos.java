@@ -62,6 +62,25 @@ public class Articulos implements Articulable{
     private Integer idRenglon;
     private String nombreProveedor;
     private Integer idProveedor;
+    private Double porcientoCosto;
+    private Double porcientoVenta;
+
+    public Double getPorcientoCosto() {
+        return porcientoCosto;
+    }
+
+    public void setPorcientoCosto(Double porcientoCosto) {
+        this.porcientoCosto = porcientoCosto;
+    }
+
+    public Double getPorcientoVenta() {
+        return porcientoVenta;
+    }
+
+    public void setPorcientoVenta(Double porcientoVenta) {
+        this.porcientoVenta = porcientoVenta;
+    }
+    
 
     public String getNombreProveedor() {
         return nombreProveedor;

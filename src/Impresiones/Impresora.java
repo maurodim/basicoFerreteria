@@ -256,7 +256,8 @@ public class Impresora {
         //pagina.drawString("RETIRO DE EFECTIVO ", 50,280);
         //formulario derecho
         pagina.setFont(fuente6);
-        pagina.drawString("ARTICULO", 20,190);
+        pagina.drawString("COD", 20, 190);
+        pagina.drawString("ARTICULO", 40,190);
         pagina.drawString("CANTIDAD", 300,190);
         int columna=200;
         String cann="";
@@ -265,7 +266,8 @@ public class Impresora {
         while(itRem.hasNext()){
             Articulos articulo=(Articulos)itRem.next();
             articList.add(articulo);
-            pagina.drawString(articulo.getDescripcionArticulo(), 20,columna);
+            pagina.drawString(articulo.getCodigoDeBarra(), 20, columna);
+            pagina.drawString(articulo.getDescripcionArticulo(), 40,columna);
             cann=String.valueOf(articulo.getCantidad());
             pagina.drawString(cann, 300,columna);
             columna=columna + 10;
@@ -398,7 +400,8 @@ public class Impresora {
         //pagina.drawString("RETIRO DE EFECTIVO ", 50,280);
         //formulario derecho
         pagina.setFont(fuente6);
-        pagina.drawString("ARTICULO", 40,190);
+        pagina.drawString("COD", 20, 190);
+        pagina.drawString("ARTICULO", 50,190);
         pagina.drawString("CANTIDAD", 330,190);
         //pagina.drawString("COSTO", 330,190);
         pagina.drawString("VENTA",410,190);
@@ -418,10 +421,11 @@ public class Impresora {
         Double costoTotal=0.00;
         while(itRem1.hasNext()){
             Articulos articulo=(Articulos)itRem1.next();
+            pagina.drawString(articulo.getCodigoDeBarra(),20, columna);
             if(articulo.getDescripcionArticulo().length() > 49){
-                pagina.drawString(articulo.getDescripcionArticulo().substring(0,49), 40,columna);
+                pagina.drawString(articulo.getDescripcionArticulo().substring(0,49), 50,columna);
             }else{
-                pagina.drawString(articulo.getDescripcionArticulo(), 40,columna);
+                pagina.drawString(articulo.getDescripcionArticulo(), 50,columna);
             }
             cann=String.valueOf(articulo.getCantidad());
             costo=String.valueOf(articulo.getPrecioDeCosto());

@@ -1086,7 +1086,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                     detalle.setDescripcion(artic.getDescripcionArticulo());
                     detalle.setCantidadS(String.valueOf(artic.getCantidad()));
                     
-                    precio=Math.round((artic.getCantidad() * artic.getPrecioUnitarioNeto()) * 100.0) / 100.0;
+                    precio=Math.round(artic.getPrecioUnitarioNeto() * 100.0) / 100.0;
                     detalle.setPrecioUnitarioS(String.valueOf(precio));
                     listadoDetalle.add(detalle);
                 }

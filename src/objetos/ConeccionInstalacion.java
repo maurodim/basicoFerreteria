@@ -261,4 +261,13 @@ public class ConeccionInstalacion implements Transaccionable{
         //return dbConnection;
         //return dbConnection;
     }
+
+    @Override
+    public void cerrar() {
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConeccionInstalacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

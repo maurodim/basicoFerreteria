@@ -57,8 +57,8 @@ public class Articulos implements Articulable{
     private Integer idCombo;
     private static ArrayList listCombo=new ArrayList();
     private Integer idDeposito;
-    private static Transaccionable tra=new ConeccionLocal();
-    private static ResultSet rr;
+    private Transaccionable tra;
+    private ResultSet rr;
     private Integer idRenglon;
     private String nombreProveedor;
     private Integer idProveedor;
@@ -400,6 +400,7 @@ public class Articulos implements Articulable{
                 
                 //resultado.add(articulo);
             }
+            //rr.close();
                   } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
             //System.out.println("ACA DEBE LEER EN LE ARCHIVO");
@@ -440,6 +441,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
+       tra.cerrar();
         //if(Inicio.coneccionRemota)BackapearMap();
         //if(Inicio.coneccionRemota)BackapearMap();
         //if(Inicio.coneccionRemota)BackapearMap();
@@ -605,7 +607,7 @@ public class Articulos implements Articulable{
             } catch(NullPointerException ey){
             System.err.println(" error de punto nulo en tabla combo :"+ey);
         }
-        
+        tra.cerrar();
 
     }
     public static synchronized void BackapearMap(Integer funcion){
@@ -679,6 +681,7 @@ public class Articulos implements Articulable{
                     tt.guardarRegistro(sql);
                 }
             }
+         tt.cerrar();
         //CargarMap();
     }
     public static synchronized void BackapearMap1(){
@@ -719,6 +722,7 @@ public class Articulos implements Articulable{
                 }
             }
         //CargarMap();
+        tt.cerrar();
     }
     private ArrayList CargarCombo(Integer id){
         Transaccionable tt=new ConeccionLocal();
@@ -737,6 +741,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        tt.cerrar();
         return listadoA;
     }
     @Override
@@ -778,7 +783,7 @@ public class Articulos implements Articulable{
         //String sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where nombre like '%"+criterio+"%'";
         String sql="select articulos.*,proveedores.nombre as nombreProveedor,(select sum(movimientosarticulos.cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos left join proveedores on proveedores.numero=articulos.PROVEEDOR where articulos.nombre like '%"+criterio+"%'";
         //String sql="select * from articulos left join (select sum(movimientosarticulos.cantidad)as sstock,movimientosarticulos.idArticulo FROM movimientosarticulos group by idArticulo,numeroDeposito limit 0,1) movimientosarticulos on articulos.ID=movimientosarticulos.idArticulo where articulos.nombre like '%"+criterio+"%'";
-        //Transaccionable tra=new ConeccionLocal();
+        tra=new ConeccionLocal();
         rr=tra.leerConjuntoDeRegistros(sql);
         try {
             Double precioIva=0.00;
@@ -820,33 +825,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*
-        Transaccionable tra=new Conecciones();
-        ArrayList resultado=new ArrayList();
-        Articulos articulo=null;
-        String sql="select *,(select stockart.stock from stockart where stockart.id=articulos.ID)as stock,(select rubros.recargo from rubros where rubros.id=articulos.idRubro)as recargo from articulos where NOMBRE like '"+criterio+"%' and INHABILITADO=0";
-        ResultSet rr=tra.leerConjuntoDeRegistros(sql);
-        try {
-            while(rr.next()){
-                articulo=new Articulos();
-                articulo.setCodigoAsignado(rr.getString("ID"));
-                articulo.setDescripcionArticulo(rr.getString("NOMBRE"));
-                articulo.setNumeroId(rr.getInt("ID"));
-                articulo.setCodigoDeBarra(rr.getString("BARRAS"));
-                articulo.setRecargo(rr.getDouble("recargo"));
-                articulo.setPrecioUnitarioNeto(rr.getDouble("PRECIO"));
-                articulo.setEquivalencia(rr.getDouble("equivalencia"));
-                articulo.setPrecioDeCosto(rr.getDouble("COSTO"));
-                articulo.setStockMinimo(rr.getDouble("MINIMO"));
-                articulo.setStockActual(rr.getDouble("stock"));
-                articulo.setPrecioServicio(rr.getDouble("SERVICIO"));
-                articulo.setModificaPrecio(rr.getBoolean("modificaPrecio"));
-                resultado.add(articulo);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        tra.cerrar();
         return resultado;
     }
 
@@ -903,7 +882,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        tra.cerrar();
         return listado;
     }
 
@@ -914,7 +893,7 @@ public class Articulos implements Articulable{
         String sql;
         
             sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock,(select tipoiva.descripcion from tipoiva where tipoiva.id=articulos.idiva)as tipoiva,(articulos.precio * (select tipoiva.tasa from tipoiva where tipoiva.id=articulos.idiva))as precioiva from articulos where BARRAS like '"+codigoDeBarra+"'";
-        
+        tra=new Conecciones();
         rr=tra.leerConjuntoDeRegistros(sql);
         Articulos articulo=new Articulos();
         
@@ -950,7 +929,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        tra.cerrar();
         return articulo;
     }
 
@@ -989,7 +968,7 @@ public class Articulos implements Articulable{
                 tra.guardarRegistro(sql);
             }
         }
-        
+        tra.cerrar();
         return ch;
     }
 
@@ -1012,6 +991,7 @@ public class Articulos implements Articulable{
                 tra.guardarRegistro(sql);
             }
         }
+         tra.cerrar();
         return ch;
     }
 
@@ -1024,7 +1004,7 @@ public class Articulos implements Articulable{
         verif=tra.guardarRegistro(sql);
         sql="insert into actualizaciones (iddeposito,idobjeto,estado) values (1,1,4),(2,1,4),(3,1,4),(4,1,4),(5,1,4),(6,1,4),(7,1,4)";
         tra.guardarRegistro(sql);
-        
+        tra.cerrar();
         return verif;
     }
 
@@ -1051,6 +1031,7 @@ public class Articulos implements Articulable{
         verif=tra.guardarRegistro(sql);
         sql="update tipocomprobantes set numeroActivo=numeroActivo + 1 where numero=18";
         tra.guardarRegistro(sql);
+        tra.cerrar();
         return verif;
     }
 
@@ -1076,7 +1057,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        tra.cerrar();
         return listado;
     }
 
@@ -1163,7 +1144,7 @@ public class Articulos implements Articulable{
         criterio=criterio.toUpperCase();
         String sql="select *,(select sum(cantidad) FROM movimientosarticulos where movimientosarticulos.idArticulo=articulos.ID group by idArticulo,numeroDeposito limit 0,1)as sstock from articulos where nombre like '%"+criterio+"%'";
         
-        //Transaccionable tra=new ConeccionLocal();
+        tra=new ConeccionLocal();
         rr=tra.leerConjuntoDeRegistros(sql);
         try {
             while(rr.next()){
@@ -1198,33 +1179,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*
-        Transaccionable tra=new Conecciones();
-        ArrayList resultado=new ArrayList();
-        Articulos articulo=null;
-        String sql="select *,(select stockart.stock from stockart where stockart.id=articulos.ID)as stock,(select rubros.recargo from rubros where rubros.id=articulos.idRubro)as recargo from articulos where NOMBRE like '"+criterio+"%' and INHABILITADO=0";
-        ResultSet rr=tra.leerConjuntoDeRegistros(sql);
-        try {
-            while(rr.next()){
-                articulo=new Articulos();
-                articulo.setCodigoAsignado(rr.getString("ID"));
-                articulo.setDescripcionArticulo(rr.getString("NOMBRE"));
-                articulo.setNumeroId(rr.getInt("ID"));
-                articulo.setCodigoDeBarra(rr.getString("BARRAS"));
-                articulo.setRecargo(rr.getDouble("recargo"));
-                articulo.setPrecioUnitarioNeto(rr.getDouble("PRECIO"));
-                articulo.setEquivalencia(rr.getDouble("equivalencia"));
-                articulo.setPrecioDeCosto(rr.getDouble("COSTO"));
-                articulo.setStockMinimo(rr.getDouble("MINIMO"));
-                articulo.setStockActual(rr.getDouble("stock"));
-                articulo.setPrecioServicio(rr.getDouble("SERVICIO"));
-                articulo.setModificaPrecio(rr.getBoolean("modificaPrecio"));
-                resultado.add(articulo);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        tra.cerrar();
         return resultado;
     }
 
@@ -1232,7 +1187,7 @@ public class Articulos implements Articulable{
     public Object cargarPorCodigoDeBarraMayorista(String codigoDeBarra) {
         //Articulos articulo;
         //articulo=(Articulos)listadoBarr.get(codigoDeBarra);
-        
+        tra=new Conecciones();
         String sql="select id,nombre,barras,precio,equivalencia,costo,minimo,stock,servicio,servicio1,modificaprecio,modificaservicio,stock,recargo,idcombo,idrubro from articulos where BARRAS like '"+codigoDeBarra+"' and INHABILITADO=0";
         rr=tra.leerConjuntoDeRegistros(sql);
         Articulos articulo=new Articulos();
@@ -1263,7 +1218,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        tra.cerrar();
         return articulo;
     }
 
@@ -1273,6 +1228,7 @@ public class Articulos implements Articulable{
         Articulos articulo;
         Integer cantt=0;
         int total=0;
+        tra=new Conecciones();
         String nuevo="insert into articulos (NOMBRE,COSTO,PRECIO,MINIMO,BARRAS,modificaPrecio,modificaServicio,idcombo,actualizacion) values ";
         while(it.hasNext()){
             articulo=(Articulos) it.next();
@@ -1293,9 +1249,11 @@ public class Articulos implements Articulable{
         System.out.println("TOTAL SENTENCIA "+total);
         total=total -1;
         nuevo=nuevo.substring(0,total);
+        //tra=new Conecciones();
         if(nuevo.length() > 153){
             tra.guardarRegistro(nuevo);
         }
+        tra.cerrar();
     }
 
     @Override
@@ -1351,12 +1309,13 @@ public class Articulos implements Articulable{
         String sql;
         Articulos articulo;
         Iterator it=listado.listIterator();
+        tra=new Conecciones();
         while(it.hasNext()){
             articulo=(Articulos) it.next();
             sql="update articulos set idrubro="+idRubro+" where id="+articulo.numeroId;
             tra.guardarRegistro(sql);
         }
-        
+        tra.cerrar();
     }
 
     @Override
@@ -1366,7 +1325,7 @@ public class Articulos implements Articulable{
         //criterio=criterio.toUpperCase();
         String sql="select *,(SELECT articulos.SERVICIO from articulos where articulos.ID=articulosv.id)as servicio from articulosv where idRubro="+idR;
         
-        //Transaccionable tra=new ConeccionLocal();
+        tra=new ConeccionLocal();
         rr=tra.leerConjuntoDeRegistros(sql);
         try {
             Double precioIva=0.00;
@@ -1406,33 +1365,7 @@ public class Articulos implements Articulable{
         } catch (SQLException ex) {
             Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*
-        Transaccionable tra=new Conecciones();
-        ArrayList resultado=new ArrayList();
-        Articulos articulo=null;
-        String sql="select *,(select stockart.stock from stockart where stockart.id=articulos.ID)as stock,(select rubros.recargo from rubros where rubros.id=articulos.idRubro)as recargo from articulos where NOMBRE like '"+criterio+"%' and INHABILITADO=0";
-        ResultSet rr=tra.leerConjuntoDeRegistros(sql);
-        try {
-            while(rr.next()){
-                articulo=new Articulos();
-                articulo.setCodigoAsignado(rr.getString("ID"));
-                articulo.setDescripcionArticulo(rr.getString("NOMBRE"));
-                articulo.setNumeroId(rr.getInt("ID"));
-                articulo.setCodigoDeBarra(rr.getString("BARRAS"));
-                articulo.setRecargo(rr.getDouble("recargo"));
-                articulo.setPrecioUnitarioNeto(rr.getDouble("PRECIO"));
-                articulo.setEquivalencia(rr.getDouble("equivalencia"));
-                articulo.setPrecioDeCosto(rr.getDouble("COSTO"));
-                articulo.setStockMinimo(rr.getDouble("MINIMO"));
-                articulo.setStockActual(rr.getDouble("stock"));
-                articulo.setPrecioServicio(rr.getDouble("SERVICIO"));
-                articulo.setModificaPrecio(rr.getBoolean("modificaPrecio"));
-                resultado.add(articulo);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Articulos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        tra.cerrar();
         return resultado;
     }
 
@@ -1441,12 +1374,13 @@ public class Articulos implements Articulable{
         String sql;
         Articulos articulo;
         Iterator it=listado.listIterator();
+        tra=new Conecciones();
         while(it.hasNext()){
             articulo=(Articulos) it.next();
             sql="update articulos set idrubro=0 where id="+articulo.numeroId;
             tra.guardarRegistro(sql);
         }
-        
+        tra.cerrar();
     }
 
     @Override
@@ -1484,11 +1418,13 @@ public class Articulos implements Articulable{
         String sql;
         Articulos articulo;
         Iterator it=listado.listIterator();
+        tra=new Conecciones();
         while(it.hasNext()){
             articulo=(Articulos) it.next();
             sql="update articulos set PROVEEDOR="+idRubro+" where id="+articulo.numeroId;
             tra.guardarRegistro(sql);
         }
+        tra.cerrar();
     }
 
     @Override
@@ -1501,11 +1437,13 @@ public class Articulos implements Articulable{
         String sql;
         Articulos articulo;
         Iterator it=listado.listIterator();
+        tra=new Conecciones();
         while(it.hasNext()){
             articulo=(Articulos) it.next();
             sql="update articulos set PROVEEDOR=0 where id="+articulo.numeroId;
             tra.guardarRegistro(sql);
         }
+        tra.cerrar();
     }
     
     

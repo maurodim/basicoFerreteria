@@ -10,7 +10,6 @@ import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +17,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,11 +36,12 @@ import java.util.logging.Logger;
 public class Conecciones implements Transaccionable{
     private Connection con;
     private PreparedStatement st;
-    private static Transaccionable tt=new ConeccionLocal();
+    private Transaccionable tt;
     private static ErroresConeccionRemota error;
 
     public Conecciones() {
                 MysqlDataSource dataSource=new MysqlDataSource();
+                tt=new ConeccionLocal();
 		try{
 			//Class.forName(driver1).newInstance();
                     
@@ -242,6 +241,15 @@ public class Conecciones implements Transaccionable{
                  verif=false;
                  }
         return verif;
+    }
+
+    @Override
+    public void cerrar() {
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conecciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     }

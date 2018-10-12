@@ -259,4 +259,13 @@ public class ConeccionLocal implements Transaccionable{
         }
         //return dbConnection;
     }
+
+    @Override
+    public void cerrar() {
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ConeccionLocal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

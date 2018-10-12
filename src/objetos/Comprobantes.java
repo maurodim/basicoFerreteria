@@ -13,13 +13,7 @@ import Impresiones.Impresora;
 import interfaceGraficas.Inicio;
 import interfaces.Transaccionable;
 import interfacesPrograma.Facturar;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.Thread.sleep;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -624,8 +618,10 @@ public class Comprobantes implements Facturar{
             Articulos articulo;
             while(rs.next()){
                 articulo=new Articulos();
+                
                 articulo.setDescripcionArticulo(rs.getString("descri"));//(Articulos) fact.cargarPorCodigoAsignado(rs.getInt("idArticulo"));
                 articulo.setCodigoAsignado(rs.getString("codA"));
+                articulo.setCodigoDeBarra(rs.getString("codA"));
                 cant=rs.getDouble("cantidad");
                 cant=cant * -1;
                 articulo.setCantidad(cant);

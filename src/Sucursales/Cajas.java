@@ -336,6 +336,7 @@ public class Cajas extends Sucursales implements Cajeables{
         }
         sql="update tipocomprobantes set numeroActivo="+numeroAct+" where numero=12";
         if(tra.guardarRegistro(sql));//System.err.println(sql);
+        tra.cerrar();
         return numeroAct;
     }
     
@@ -363,7 +364,7 @@ public class Cajas extends Sucursales implements Cajeables{
             Inicio.coneccionRemota=false;
             LeerCajaAdministradora();
         }
-        
+        tra.cerrar();
         
     }
     private static void ListarCajas(){
@@ -395,7 +396,7 @@ public class Cajas extends Sucursales implements Cajeables{
         } catch (SQLException ex) {
             Logger.getLogger(Cajas.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        tra.cerrar();
     }
     private static void ListarCajas1(){
         String sql="select * from caja order by numero desc limit 0,30";
@@ -444,6 +445,7 @@ public class Cajas extends Sucursales implements Cajeables{
         } catch(NullPointerException ee){
             
         }
+        tra.cerrar();
     }
     public static void BackapearCajas(){
         numeroDeComprobanteBk++;
@@ -478,8 +480,10 @@ public class Cajas extends Sucursales implements Cajeables{
             tra.guardarRegistro(sql);
             //System.out.println(sql);
         }
+        tra.cerrar();
         }
         }
+        
     }
     @Override
     public Object AbrirCaja(Object caja) {
@@ -548,9 +552,11 @@ public class Cajas extends Sucursales implements Cajeables{
                 //sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,monto,tipoMovimiento,idCaja,numerocomprobante,tipocomprobante,pagado) values ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+cajaNueva.getSaldoInicial()+",9,"+cajaNueva.getNumero()+","+nume+",0,0)";
                 //BkDeConeccion.guardarSentencias(sql);
             // return cajaNueva;
+            tra.cerrar();
         } catch (SQLException ex) {
             Logger.getLogger(Cajas.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
         return cajaNueva;
     }
 
@@ -628,7 +634,7 @@ public class Cajas extends Sucursales implements Cajeables{
             sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado) values ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+cajj.getNumeroDeComprobante()+","+cajj.getTipoDeComprobante()+","+montt+",10,"+Inicio.numeroCajaAdministradora+",0,0,1)";
             verif=tra.guardarRegistro(sql);
         }
-        
+        tra.cerrar();
         return verif;
     }
 
@@ -650,7 +656,7 @@ public class Cajas extends Sucursales implements Cajeables{
         String sql="insert into movimientoscaja (numeroUsuario,numeroSucursal,numeroComprobante,tipoComprobante,monto,tipoMovimiento,idCaja,idCliente,tipoCliente,pagado) values ("+Inicio.usuario.getNumeroId()+","+Inicio.sucursal.getNumero()+","+caj.getNumeroDeComprobante()+","+caj.getTipoDeComprobante()+","+caj.getMontoMovimiento()+","+caj.getTipoMovimiento()+","+caj.getNumero()+",0,0,1)";
         Transaccionable tra=new ConeccionLocal();
         ch=tra.guardarRegistro(sql);
-        
+        tra.cerrar();
         return ch;
     }
 
@@ -717,7 +723,7 @@ public class Cajas extends Sucursales implements Cajeables{
                
                break;
        }
-       
+       tra.cerrar();
        return true;
     }
 
@@ -755,7 +761,7 @@ public class Cajas extends Sucursales implements Cajeables{
         } catch(NullPointerException ee){
             JOptionPane.showMessageDialog(null,"Fallo en la conexion, verifique si posee conexion a Internet");
         }
-        
+        tra.cerrar();
         return cajas;
     }
 
@@ -783,6 +789,7 @@ public class Cajas extends Sucursales implements Cajeables{
             Logger.getLogger(Cajas.class.getName()).log(Level.SEVERE, null, ex);
         }
         //if(Inicio.coneccionRemota)BackapearCajas();
+        tra.cerrar();
         return verifi;
     }
     @Override
@@ -808,6 +815,7 @@ public class Cajas extends Sucursales implements Cajeables{
         } catch (SQLException ex) {
             Logger.getLogger(Cajas.class.getName()).log(Level.SEVERE, null, ex);
         }
+        tra.cerrar();
         return cajas;
     }
 
@@ -842,7 +850,7 @@ public class Cajas extends Sucursales implements Cajeables{
         //}
         tra.guardarRegistro(sql);
         //sql="update comprobantes "
-        
+        tra.cerrar();
         return caj;
     }
 
@@ -1023,7 +1031,7 @@ public class Cajas extends Sucursales implements Cajeables{
                
                break;
        }
-       
+       tra.cerrar();
        return modelo;
     }
     

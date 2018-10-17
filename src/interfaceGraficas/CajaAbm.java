@@ -64,7 +64,7 @@ public class CajaAbm extends javax.swing.JInternalFrame {
         Object[] fila=new Object[3];
         while(itC.hasNext()){
             cajj=(Cajas)itC.next();
-            fila[0]=cajj.getNumeroDeComprobante();
+            fila[0]=cajj.getIdMovimiento();//cajj.getNumeroDeComprobante();
             fila[1]=cajj.getDescripcionMovimiento();
             if(cajj.getTipoMovimiento()==1 || cajj.getTipoMovimiento()==7 || cajj.getTipoMovimiento()==13){
             totalVentas=totalVentas + cajj.getMontoMovimiento();

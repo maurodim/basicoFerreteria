@@ -942,13 +942,9 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jLabel10PropertyChange
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        //verificar();
-        //Impresora imp=new Impresora();
+        
         String cadena=cliT.getCodigoCliente()+" - "+cliT.getRazonSocial()+"\n"+cliT.getDireccion();
-        //comp.setCliente(cliT);
-        //VisorDeHojaDeRuta
-
-        //comp.setVendedor(VisorDeHojaDeRuta.tG.getOperador());
+        
         if(this.jCheckBox1.isSelected()){
             //    comp.setReparto(1);
             //    comp.setEntrega(String.valueOf(this.jTextField3.getText()));
@@ -1099,38 +1095,7 @@ public class IngresoDePedidos extends javax.swing.JInternalFrame {
                 //if(pedido.getId() != null)idPed=pedido.getId();
                 System.out.println("COMPROBANTE FISCAL N° "+fact.generar(null, condicion, Propiedades.getARCHIVOKEY(),Propiedades.getARCHIVOCRT(),cliT.getCodigoId(), cliT.getNumeroDeCuit(), comprobante.getTipoComprobante(), montoTotal, subTotal, montoIva, ptoVta, Propiedades.getCUIT(), tipoVta, listadoIva, listadoTrib, cliT.getRazonSocial(), cliT.getDireccion(), cliT.getCondicionIva(), listadoDetalle,idPed));
                 
-                /*
-                FacturaElectronica fe=new FacturaElectronica();
-                try {
-
-                    fe=(FacturaElectronica) fe.leer(comprobante);
-                    if(fe.getRespuesta().equals("OK")){
-                        //JOptionPane.showMessageDialog(this,"aprobada id: "+fe.getId());
-                        pdfsJavaGenerador pdf=new pdfsJavaGenerador();
-                        pdf.setDoc(fe);
-                        pdf.setCliente(cliT);
-                        pdf.run();
-                        
-
-                    }else{
-                        if(fe.getRespuesta().equals("PARAMETROS"))JOptionPane.showMessageDialog(this,"Error en los parametros del cliente, modifiquelos en cae pendientes");
-                        JOptionPane.showMessageDialog(this,"error en la coneccion, intentelo mas tarde");
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
-                    System.err.println(ex);
-                } catch (ParserConfigurationException ex) {
-                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SAXException ex) {
-                    Logger.getLogger(IngresoDePedidos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                */
-                /*
-                * ACA DEBO LIMPIAR TODOS LOS CAMPOS Y VARIABLES DE LA PANTALLA
-                *
-                */
-                //comp.setTipoComprobante(comprobanteTipo);
-                //comp.setMontoTotal(montoTotal);
+                
                 detalleDelPedido.clear();
                 agregarRenglonTabla();
                 this.jCheckBox2.setSelected(true);
